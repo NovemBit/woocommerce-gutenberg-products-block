@@ -91,7 +91,7 @@
 		"@types/classnames": "2.2.11",
 		"@types/jest": "26.0.20",
 		"@types/lodash": "4.14.168",
-		"@types/react": "16.14.2",
+		"@types/react": "17.0.3",
 		"@types/wordpress__api-fetch": "3.2.3",
 		"@types/wordpress__data": "4.6.9",
 		"@types/wordpress__data-controls": "1.0.4",
