@@ -1,9 +1,15 @@
-/** @typedef { import('@woocommerce/type-defs/address-fields').AddressField } AddressField */
-
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies
+ */
+import type {
+	AddressFields as AddressFieldsType,
+	AddressField,
+} from '../../../../type-defs/customer';
 
 /**
  * Default address field properties.
@@ -18,7 +24,7 @@ import { __ } from '@wordpress/i18n';
  * @property {AddressField} state      State name or code.
  * @property {AddressField} postcode   Postal code.
  */
-const AddressFields = {
+const AddressFields: AddressFieldsType = {
 	first_name: {
 		label: __( 'First name', 'woo-gutenberg-products-block' ),
 		optionalLabel: __(
