@@ -3,7 +3,10 @@
 /**
  * Internal dependencies
  */
-import defaultAddressFields from './default-address-fields';
+import defaultAddressFields, {
+	AddressField,
+	AddressFields,
+} from './default-address-fields';
 import countryAddressFields from './country-address-fields';
 
 /**
@@ -14,7 +17,11 @@ import countryAddressFields from './country-address-fields';
  * @param {string} addressCountry Address country code. If unknown, locale fields will not be merged.
  * @return {CountryAddressFields} Object containing address fields.
  */
-const prepareAddressFields = ( fields, fieldConfigs, addressCountry = '' ) => {
+const prepareAddressFields = (
+	fields: ( keyof AddressFields )[],
+	fieldConfigs: Record< string, unknown >,
+	addressCountry = ''
+) => {
 	const localeConfigs =
 		addressCountry && countryAddressFields[ addressCountry ] !== undefined
 			? countryAddressFields[ addressCountry ]
@@ -22,9 +29,10 @@ const prepareAddressFields = ( fields, fieldConfigs, addressCountry = '' ) => {
 
 	return fields
 		.map( ( field ) => {
-			const defaultConfig = defaultAddressFields[ field ] || {};
-			const localeConfig = localeConfigs[ field ] || {};
-			const fieldConfig = fieldConfigs[ field ] || {};
+			const defaultConfig =
+				defaultAddressFields[ field ] || Object.assign( {} );
+			const localeConfig = localeConfigs[ field ] || Object.assign( {} );
+			const fieldConfig = fieldConfigs[ field ] || Object.assign( {} );
 
 			return {
 				key: field,
