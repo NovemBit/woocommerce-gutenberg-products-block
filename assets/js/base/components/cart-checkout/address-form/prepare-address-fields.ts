@@ -3,11 +3,13 @@
 /**
  * Internal dependencies
  */
-import defaultAddressFields, {
-	AddressField,
-	AddressFields,
-} from './default-address-fields';
+import defaultAddressFields from './default-address-fields';
 import countryAddressFields from './country-address-fields';
+import type {
+	AddressFieldConfiguration,
+	AddressFields,
+	KeyedAddressFieldConfiguration,
+} from '../../../../type-defs/customer';
 
 /**
  * Combines address fields, including fields from the locale, and sorts them by index.
@@ -15,17 +17,23 @@ import countryAddressFields from './country-address-fields';
  * @param {Array} fields List of field keys--only address fields matching these will be returned.
  * @param {Object} fieldConfigs Fields config contains field specific overrides at block level which may, for example, hide a field.
  * @param {string} addressCountry Address country code. If unknown, locale fields will not be merged.
- * @return {CountryAddressFields} Object containing address fields.
  */
 const prepareAddressFields = (
-	fields: ( keyof AddressFields )[],
-	fieldConfigs: Record< string, unknown >,
+	fields: ( keyof AddressFields )[] | undefined,
+	fieldConfigs: Record<
+		keyof AddressFields,
+		Partial< AddressFieldConfiguration >
+	>,
 	addressCountry = ''
-) => {
+): KeyedAddressFieldConfiguration[] => {
 	const localeConfigs =
 		addressCountry && countryAddressFields[ addressCountry ] !== undefined
 			? countryAddressFields[ addressCountry ]
 			: {};
+
+	if ( fields === undefined ) {
+		return [];
+	}
 
 	return fields
 		.map( ( field ) => {
