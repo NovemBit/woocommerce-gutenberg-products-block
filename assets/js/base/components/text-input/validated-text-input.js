@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useCallback, useRef, useEffect, useState } from 'react';
+import { useCallback, useRef, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useValidationContext } from '@woocommerce/base-context';
@@ -25,6 +25,7 @@ const ValidatedTextInput = ( {
 	focusOnMount = false,
 	onChange,
 	showError = true,
+	customValidation = null,
 	...rest
 } ) => {
 	const [ isPristine, setIsPristine ] = useState( true );
@@ -39,6 +40,10 @@ const ValidatedTextInput = ( {
 
 	const textInputId = id || 'textinput-' + instanceId;
 	errorId = errorId || textInputId;
+	const errorMessage = useMemo( () => getValidationError( errorId ) || {}, [
+		getValidationError,
+		errorId,
+	] );
 
 	const validateInput = useCallback(
 		( errorsHidden = true ) => {
@@ -48,7 +53,12 @@ const ValidatedTextInput = ( {
 			}
 			// Trim white space before validation.
 			inputObject.value = inputObject.value.trim();
-			const inputIsValid = inputObject.checkValidity();
+			let inputIsValid = inputObject.checkValidity();
+
+			if ( typeof customValidation === 'function' ) {
+				inputIsValid = customValidation( inputObject.value );
+			}
+
 			if ( inputIsValid ) {
 				clearValidationError( errorId );
 			} else {
@@ -56,6 +66,7 @@ const ValidatedTextInput = ( {
 					[ errorId ]: {
 						message:
 							inputObject.validationMessage ||
+							errorMessage ||
 							__(
 								'Invalid value.',
 								'woo-gutenberg-products-block'
@@ -65,7 +76,13 @@ const ValidatedTextInput = ( {
 				} );
 			}
 		},
-		[ clearValidationError, errorId, setValidationErrors ]
+		[
+			clearValidationError,
+			customValidation,
+			errorId,
+			errorMessage,
+			setValidationErrors,
+		]
 	);
 
 	useEffect( () => {
@@ -93,7 +110,6 @@ const ValidatedTextInput = ( {
 		};
 	}, [ clearValidationError, errorId ] );
 
-	const errorMessage = getValidationError( errorId ) || {};
 	const hasError = errorMessage.message && ! errorMessage.hidden;
 	const describedBy =
 		showError && hasError && getValidationErrorId( errorId )
@@ -132,6 +148,7 @@ ValidatedTextInput.propTypes = {
 	validateOnMount: PropTypes.bool,
 	focusOnMount: PropTypes.bool,
 	showError: PropTypes.bool,
+	customValidation: PropTypes.func,
 };
 
 export default withInstanceId( ValidatedTextInput );
