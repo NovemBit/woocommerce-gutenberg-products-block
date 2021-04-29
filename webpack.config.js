@@ -104,6 +104,7 @@ const LegacyMainConfig = {
 			'checkout',
 			'cart',
 			'single-product',
+			'color-attribute-filter',
 		],
 	} ),
 };
@@ -127,6 +128,7 @@ const LegacyFrontendConfig = {
 			'checkout',
 			'cart',
 			'single-product',
+			'color-attribute-filter',
 		],
 	} ),
 };
@@ -143,6 +145,7 @@ const LegacyStylingConfig = {
 			'checkout',
 			'cart',
 			'single-product',
+			'color-attribute-filter',
 		],
 	} ),
 };

@@ -48,6 +48,7 @@ const blocks = {
 	'single-product': {
 		isExperimental: true,
 	},
+	'color-attribute-filter': {},
 };
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
