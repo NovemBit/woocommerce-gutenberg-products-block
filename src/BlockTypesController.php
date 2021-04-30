@@ -105,6 +105,7 @@ final class BlockTypesController {
 			'AttributeFilter',
 			'StockFilter',
 			'ActiveFilters',
+			'ColorAttributeFilter',
 		];
 
 		if ( Package::feature()->is_feature_plugin_build() ) {
@@ -128,6 +129,7 @@ final class BlockTypesController {
 					'AttributeFilter',
 					'StockFilter',
 					'ActiveFilters',
+					'ColorAttributeFilter',
 				]
 			);
 		}
