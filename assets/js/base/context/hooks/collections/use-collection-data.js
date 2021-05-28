@@ -37,6 +37,7 @@ export const useCollectionData = ( {
 	queryAttribute,
 	queryPrices,
 	queryStock,
+	queryCategory,
 	queryState,
 } ) => {
 	let context = useQueryStateContext();
@@ -55,10 +56,15 @@ export const useCollectionData = ( {
 		calculateStockStatusQueryState,
 		setCalculateStockStatusQueryState,
 	] = useQueryStateByKey( 'calculate_stock_status_counts', null, context );
+	const [
+		calculateCategoryQueryState,
+		setCalculateCategoryQueryState,
+	] = useQueryStateByKey( 'calculate_category_counts', null, context );
 
 	const currentQueryAttribute = useShallowEqual( queryAttribute || {} );
 	const currentQueryPrices = useShallowEqual( queryPrices );
 	const currentQueryStock = useShallowEqual( queryStock );
+	const currentQueryCategory = useShallowEqual( queryCategory );
 
 	useEffect( () => {
 		if (
@@ -110,6 +116,19 @@ export const useCollectionData = ( {
 		currentQueryStock,
 		setCalculateStockStatusQueryState,
 		calculateStockStatusQueryState,
+	] );
+
+	useEffect( () => {
+		if (
+			calculateCategoryQueryState !== currentQueryCategory &&
+			currentQueryCategory !== undefined
+		) {
+			setCalculateCategoryQueryState( currentQueryCategory );
+		}
+	}, [
+		currentQueryCategory,
+		setCalculateCategoryQueryState,
+		calculateCategoryQueryState,
 	] );
 
 	// Defer the select query so all collection-data query vars can be gathered.

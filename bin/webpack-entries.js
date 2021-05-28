@@ -39,6 +39,7 @@ const blocks = {
 	'price-filter': {},
 	'attribute-filter': {},
 	'stock-filter': {},
+	'category-filter': {},
 	'active-filters': {},
 	cart: {
 		customDir: 'cart-checkout/cart',

@@ -1,0 +1,42 @@
+.wc-block-category-filter {
+	margin-bottom: $gap-large;
+
+	.wc-block-category-filter-list-count {
+		&::before {
+			content: " (";
+		}
+		&::after {
+			content: ")";
+		}
+	}
+
+	.wc-block-category-filter-list {
+		margin: 0;
+
+		li {
+			text-decoration: underline;
+
+			label {
+				cursor: pointer;
+			}
+
+			input {
+				cursor: pointer;
+				display: inline-block;
+			}
+		}
+
+		.wc-block-category-filter-list-count {
+			float: right;
+		}
+	}
+
+	.is-single .wc-block-category-filter-list-count,
+	.wc-block-dropdown-selector .wc-block-dropdown-selector__list .wc-block-category-filter-list-count {
+		opacity: 0.6;
+	}
+
+	.wc-block-category-filter__button {
+		margin-top: $gap-smaller;
+	}
+}
