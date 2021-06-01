@@ -1,43 +1,54 @@
+image: registry.gitlab.com/xpac-group/sysadmin/docker/images/wordpress-ci
+
 stages:
   - build
   - deploy
 
-# The Docker image we use that contains our custom CI scripts
-image: registry.gitlab.com/xpac-group/sysadmin/docker/images/wordpress-php7.4-ci-cd:latest
-
 # Copy our private SSH key and known hosts keys into place for SFTP deployments
 before_script:
   - mkdir ~/.ssh
-  - echo $XPAC_PRIVATE_KEY | base64 -d >~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
-  - echo $XPAC_PUBLIC_KEY | base64 -d >~/.ssh/id_rsa.pub
-  - composer global config gitlab-token.gitlab.com $XPAC_GITLAB_GROUP_TOKEN
-  - RPATH=/var/www/html/wp-content/plugins
-  - FILE="${CI_PROJECT_NAME}.tar.gz"
-  - function upload { scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $2 $FILE root@$1:$RPATH/$FILE; }
-  - function extract { ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $2 root@$1 "cd ${RPATH} && rm -rf ${CI_PROJECT_NAME} && mkdir -p ${CI_PROJECT_NAME} && tar -xzf $FILE -C ./${CI_PROJECT_NAME} && rm -rf ./$FILE;"; }
-  - function deploy { upload "$1" "$2" && extract "$1" "$2"; }
+  - echo $SSH_PRIVATE_KEY | base64 -d >~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
+  - echo $SSH_PUBLIC_KEY | base64 -d >~/.ssh/id_rsa.pub
+  - echo $SSH_KNOWN_HOSTS | base64 -d >~/.ssh/known_hosts && chmod 0644 ~/.ssh/known_hosts
+  - composer global config gitlab-token.gitlab.com $GITLAB_READ_ACCESS_TOKEN
+  - function dp { ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $2 root@$1 "cd /var/www/html; wp plugin install 'https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$BUILD_JOB_ID/artifacts/$CI_PROJECT_NAME.zip?private_token=$GITLAB_READ_ACCESS_TOKEN' --force"; }
 
 build:
   stage: build
   script:
-    - composer update
-    - rm -rf node_modules
-    - touch $FILE
-    - tar --exclude="./${FILE}" -czf  ${FILE} ./
+    - wp-build $CI_PROJECT_NAME
+    - echo "BUILD_JOB_ID=$CI_JOB_ID" >> build.env
   artifacts:
     paths:
-      - '*.tar.gz'
+      - ./
+    reports:
+      dotenv: build.env
 
-deploy:dev:
+deploy:
   stage: deploy
   only:
     - develop
   script:
-    - deploy "$XPAC_DEV_SERVER_HOST" "$XPAC_DEV_SERVER_PORT"
+    -  dp 188.34.206.116 2099 develop
+  dependencies:
+    - build
 
-deploy:novembit:
+deploy:nebeauty:
   stage: deploy
   only:
     - develop
   script:
-    - deploy "$XPAC_NOVEMBIT_SERVER_HOST" "$XPAC_NOVEMBIT_SERVER_PORT"
+    -  dp 188.34.206.116 2322 develop
+  dependencies:
+    - build
+
+deploy:dev-groups:
+  stage: deploy
+  only:
+    - develop
+  script:
+    -  dp 188.34.206.116 2422 develop # backend
+    -  dp 188.34.206.116 2522 develop # frontend
+    -  dp 188.34.206.116 2822 develop # frontend
+  dependencies:
+    - build
