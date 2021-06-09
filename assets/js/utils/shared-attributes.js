@@ -62,6 +62,7 @@ export default {
 			price: true,
 			rating: true,
 			button: true,
+			category: true
 		},
 	},
 
