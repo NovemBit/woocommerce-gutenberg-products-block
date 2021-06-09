@@ -120,10 +120,11 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		return array(
 			'type'       => 'object',
 			'properties' => array(
-				'title'  => $this->get_schema_boolean( true ),
-				'price'  => $this->get_schema_boolean( true ),
-				'rating' => $this->get_schema_boolean( true ),
-				'button' => $this->get_schema_boolean( true ),
+				'title'    => $this->get_schema_boolean( true ),
+				'price'    => $this->get_schema_boolean( true ),
+				'rating'   => $this->get_schema_boolean( true ),
+				'button'   => $this->get_schema_boolean( true ),
+				'category' => $this->get_schema_boolean( true ),
 			),
 		);
 	}
@@ -156,10 +157,11 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'categories'        => array(),
 			'catOperator'       => 'any',
 			'contentVisibility' => array(
-				'title'  => true,
-				'price'  => true,
-				'rating' => true,
-				'button' => true,
+				'title'    => true,
+				'price'    => true,
+				'rating'   => true,
+				'button'   => true,
+				'category' => true,
 			),
 		);
 
@@ -354,6 +356,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'price'     => $this->get_price_html( $product ),
 			'badge'     => $this->get_sale_badge_html( $product ),
 			'button'    => $this->get_button_html( $product ),
+			'category'  => $this->get_categories_html( $product ),
 		);
 
 		return apply_filters(
@@ -364,6 +367,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 					{$data->title}
 				</a>
 				{$data->badge}
+				{$data->category}
 				{$data->price}
 				{$data->rating}
 				{$data->button}
@@ -467,6 +471,20 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			return '';
 		}
 		return '<div class="wp-block-button wc-block-grid__product-add-to-cart">' . $this->get_add_to_cart( $product ) . '</div>';
+	}
+
+	/**
+	 * Get the button.
+	 *
+	 * @param \WC_Product $product Product.
+	 * @return string Rendered product output.
+	 */
+	protected function get_categories_html( $product ) {
+		if ( empty( $this->attributes['contentVisibility']['category'] ) ) {
+			return '';
+		}
+
+		return '<div class="wc-block-grid__product-categories-list">' . wc_get_product_category_list( $product->get_id() ) . '</div>';
 	}
 
 	/**
