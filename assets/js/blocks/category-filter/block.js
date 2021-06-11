@@ -27,7 +27,7 @@ const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
 
 const initialOptions = Object.entries(
 	CATEGORY_OPTIONS
-).map( ( [ slug, name ] ) => ( { slug, name } ) );
+).map( ( [ id, cat ] ) => ( { id, cat } ) );
 
 /**
  * Component displaying an stock status filter.
@@ -49,10 +49,8 @@ const CategoryFilterBlock = ( {
 	const [
 		productCategoryQuery,
 		setProductCategoryQuery,
-	] = useQueryStateByKey( 'category', [] );
+	] = useQueryStateByKey( 'product_cat', [] );
 
-	 results = 5;
-	isLoading = false;
 	const {
 		results: filteredCounts,
 		isLoading: filteredCountsLoading,
@@ -64,14 +62,13 @@ const CategoryFilterBlock = ( {
 	/**
 	 * Get count data about a given status by slug.
 	 */
-	const getFilteredStock = useCallback(
-		( slug ) => {
+	const getFilteredCategory = useCallback(
+		( cat_id ) => {
 			if ( ! filteredCounts.category_counts ) {
 				return null;
 			}
 			return filteredCounts.category_counts.find(
-				( { status, count } ) =>
-					status === slug && Number( count ) !== 0
+				( { id } ) => id === cat_id
 			);
 		},
 		[ filteredCounts ]
@@ -100,25 +97,24 @@ const CategoryFilterBlock = ( {
 		}
 
 		const newOptions = initialOptions
-			.map( ( status ) => {
-				const filteredStock = getFilteredStock( status.slug );
-
+			.map( ( category ) => {
+				let filteredCategory = getFilteredCategory( Number( category.id ) );
 				if (
-					! filteredStock &&
-					! checked.includes( status.slug ) &&
-					! isCategoryInQueryState( status.slug )
+					! filteredCategory &&
+					! checked.includes( category.id ) &&
+					! isCategoryInQueryState( category.id )
 				) {
 					return null;
 				}
 
-				const count = filteredStock ? Number( filteredStock.count ) : 0;
+				const count = filteredCategory ? Number( filteredCategory.count ) : 0;
 
 				return {
-					value: status.slug,
-					name: decodeEntities( status.name ),
+					value: category.id,
+					name: decodeEntities( category.cat.name ),
 					label: (
 						<Label
-							name={ decodeEntities( status.name ) }
+							name={ decodeEntities( category.cat.name ) }
 							count={ blockAttributes.showCounts ? count : null }
 						/>
 					),
@@ -131,7 +127,7 @@ const CategoryFilterBlock = ( {
 		blockAttributes.showCounts,
 		blockAttributes.isPreview,
 		filteredCountsLoading,
-		getFilteredStock,
+		getFilteredCategory,
 		checked,
 		queryState.category,
 	] );

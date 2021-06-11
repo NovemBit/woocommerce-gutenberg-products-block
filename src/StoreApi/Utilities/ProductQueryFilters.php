@@ -114,6 +114,68 @@ class ProductQueryFilters {
 	}
 
 	/**
+	 * Get category counts for the current products.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 * @return array termId=>count pairs.
+	 */
+	public function get_category_counts( $request ) {
+		global $wpdb;
+
+		// Remove paging and sorting params from the request.
+		$request->set_param( 'page', null );
+		$request->set_param( 'per_page', null );
+		$request->set_param( 'order', null );
+		$request->set_param( 'orderby', null );
+
+		// Grab the request from the WP Query object, and remove SQL_CALC_FOUND_ROWS and Limits so we get a list of all products.
+		$product_query = new ProductQuery();
+
+		add_filter( 'posts_clauses', array( $product_query, 'add_query_clauses' ), 10, 2 );
+		add_filter( 'posts_pre_query', '__return_empty_array' );
+
+		$query_args                   = $product_query->prepare_objects_query( $request );
+		foreach ( $query_args as $key => $args ){
+			if( $key == 'tax_query' ){
+				foreach ( $args as $index => $value ){
+					if( $value['taxonomy'] == 'product_cat' ){
+						unset( $query_args[ 'tax_query' ][ $index ] );
+					}
+				}
+			}
+		}
+		$query_args['no_found_rows']  = true;
+		$query_args['posts_per_page'] = -1;
+		$query                        = new \WP_Query();
+		$result                       = $query->query( $query_args );
+		$product_query_sql            = $query->request;
+
+		remove_filter( 'posts_clauses', array( $product_query, 'add_query_clauses' ), 10 );
+		remove_filter( 'posts_pre_query', '__return_empty_array' );
+
+		$category_count_sql     = "
+			SELECT COUNT( DISTINCT posts.ID ) as cat_count, terms.term_id as cat_count_id, term_taxonomy.parent AS cat_parent
+			FROM {$wpdb->posts} AS posts
+			INNER JOIN {$wpdb->term_relationships} AS term_relationships ON posts.ID = term_relationships.object_id
+			INNER JOIN {$wpdb->term_taxonomy} AS term_taxonomy USING( term_taxonomy_id )
+			INNER JOIN {$wpdb->terms} AS terms USING( term_id )
+			WHERE posts.ID IN ( {$product_query_sql} ) AND term_taxonomy.taxonomy IN ('product_cat')
+			GROUP BY terms.term_id
+		";
+
+		$results = $wpdb->get_results( $category_count_sql ); // phpcs:ignore
+		$counts = array_map( 'absint', wp_list_pluck( $results, 'cat_count', 'cat_count_id' ) );
+		$parents = array_map( 'absint', wp_list_pluck( $results, 'cat_parent', 'cat_count_id' ) );
+
+		foreach ( $parents as $cat_id => $parent_id ){
+			if( $parent_id > 0 ){
+				$counts[ $parent_id ] +=  $counts[ $cat_id ];
+			}
+		}
+		return $counts;
+	}
+
+	/**
 	 * Get attribute counts for the current products.
 	 *
 	 * @param \WP_REST_Request $request The request object.
