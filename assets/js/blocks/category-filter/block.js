@@ -264,6 +264,7 @@ const CategoryFilterBlock = ( {
 					onChange={ onChange }
 					isLoading={ isLoading }
 					isDisabled={ isDisabled }
+					limit={5}
 				/>
 				{ blockAttributes.showFilterButton && (
 					<FilterSubmitButton
