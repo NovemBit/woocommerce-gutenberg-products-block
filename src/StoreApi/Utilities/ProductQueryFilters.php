@@ -154,7 +154,7 @@ class ProductQueryFilters {
 		remove_filter( 'posts_pre_query', '__return_empty_array' );
 
 		$category_count_sql     = "
-			SELECT COUNT( DISTINCT posts.ID ) as cat_count, terms.term_id as cat_count_id, term_taxonomy.parent AS cat_parent
+			SELECT COUNT( DISTINCT posts.ID ) as cat_count, terms.term_id as cat_count_id
 			FROM {$wpdb->posts} AS posts
 			INNER JOIN {$wpdb->term_relationships} AS term_relationships ON posts.ID = term_relationships.object_id
 			INNER JOIN {$wpdb->term_taxonomy} AS term_taxonomy USING( term_taxonomy_id )
@@ -164,15 +164,8 @@ class ProductQueryFilters {
 		";
 
 		$results = $wpdb->get_results( $category_count_sql ); // phpcs:ignore
-		$counts = array_map( 'absint', wp_list_pluck( $results, 'cat_count', 'cat_count_id' ) );
-		$parents = array_map( 'absint', wp_list_pluck( $results, 'cat_parent', 'cat_count_id' ) );
 
-		foreach ( $parents as $cat_id => $parent_id ){
-			if( $parent_id > 0 ){
-				$counts[ $parent_id ] +=  $counts[ $cat_id ];
-			}
-		}
-		return $counts;
+		return array_map( 'absint', wp_list_pluck( $results, 'cat_count', 'cat_count_id' ) );
 	}
 
 	/**
