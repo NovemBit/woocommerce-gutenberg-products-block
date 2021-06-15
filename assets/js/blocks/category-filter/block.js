@@ -11,7 +11,7 @@ import {
 } from '@woocommerce/base-context/hooks';
 import { getSetting } from '@woocommerce/settings';
 import { useCallback, useEffect, useState, useMemo } from '@wordpress/element';
-import CheckboxList from '@woocommerce/base-components/checkbox-list';
+import CheckboxListHierarchical from '@woocommerce/base-components/checkbox-list-hierarchical';
 import FilterSubmitButton from '@woocommerce/base-components/filter-submit-button';
 import isShallowEqual from '@wordpress/is-shallow-equal';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -28,7 +28,7 @@ const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
 const initialOptions = Object.entries(
 	CATEGORY_OPTIONS
 ).map( ( [ id, cat ] ) => ( { id, cat } ) );
-
+console.log( initialOptions )
 /**
  * Component displaying an stock status filter.
  *
@@ -112,6 +112,7 @@ const CategoryFilterBlock = ( {
 				return {
 					value: category.id,
 					name: decodeEntities( category.cat.name ),
+					parent: category.cat.parent,
 					label: (
 						<Label
 							name={ decodeEntities( category.cat.name ) }
@@ -257,7 +258,7 @@ const CategoryFilterBlock = ( {
 				<TagName>{ blockAttributes.heading }</TagName>
 			) }
 			<div className="wc-block-category-filter">
-				<CheckboxList
+				<CheckboxListHierarchical
 					className={ 'wc-block-category-filter-list' }
 					options={ displayedOptions }
 					checked={ checked }
