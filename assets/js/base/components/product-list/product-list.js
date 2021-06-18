@@ -160,7 +160,7 @@ const ProductList = ( {
 	if( archiveTaxonomyId ){
 		setArchiveTaxonomyId( [ archiveTaxonomyId ] )
 	}else{
-		setArchiveTaxonomyId( [] )
+		setArchiveTaxonomyId( productsTaxonomyId )
 	}
 
 	// These are possible filters.
