@@ -122,7 +122,7 @@ const CategoryFilterBlock = ( {
 				};
 			} )
 			.filter( Boolean );
-
+		console.log( newOptions )
 		setDisplayedOptions( newOptions );
 	}, [
 		blockAttributes.showCounts,

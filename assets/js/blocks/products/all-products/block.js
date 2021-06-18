@@ -27,6 +27,7 @@ class Block extends Component {
 		}
 
 		const hideOutOfStockItems = getSetting( 'hideOutOfStockItems', false );
+		const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
 
 		/**
 		 * Todo classes
@@ -43,6 +44,7 @@ class Block extends Component {
 					attributes={ attributes }
 					urlParameterSuffix={ urlParameterSuffix }
 					hideOutOfStockItems={ hideOutOfStockItems }
+					archiveTaxonomyId={ archiveTaxonomyId }
 				/>
 			</InnerBlockLayoutContextProvider>
 		);
