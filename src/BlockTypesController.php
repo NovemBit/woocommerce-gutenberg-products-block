@@ -145,6 +145,8 @@ final class BlockTypesController {
 					'ColorAttributeFilter',
 					'CategoryFilter',
 					'ActiveFilters',
+					'Cart',
+					'Checkout',
 				]
 			);
 		}
