@@ -117,9 +117,9 @@ final class BlockTypesController {
 			'PriceFilter',
 			'AttributeFilter',
 			'StockFilter',
+			'ColorAttributeFilter',
 			'CategoryFilter',
 			'ActiveFilters',
-			'ColorAttributeFilter',
 		];
 
 		if ( Package::feature()->is_feature_plugin_build() ) {
