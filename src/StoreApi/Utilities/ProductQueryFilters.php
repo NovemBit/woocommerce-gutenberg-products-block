@@ -173,7 +173,7 @@ class ProductQueryFilters {
 				}
 			}
 		}
-//		var_export( $id_count_map );
+//		var_export( $id_count_map );die;
 //		var_export( $id_parent_map );die;
 		return $id_count_map;
 	}

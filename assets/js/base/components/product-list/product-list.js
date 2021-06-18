@@ -81,7 +81,7 @@ const generateQuery = ( {
 		catalog_visibility: 'catalog',
 		per_page: columns * rows,
 		page: currentPage,
-		stock_status: productStockStatus,
+		stock_status: productStockStatus
 	};
 };
 
@@ -136,6 +136,7 @@ const ProductList = ( {
 	sortValue,
 	scrollToTop,
 	hideOutOfStockItems = false,
+	archiveTaxonomyId
 } ) => {
 	const [ queryState ] = useSynchronizedQueryState(
 		generateQuery( {
@@ -151,6 +152,16 @@ const ProductList = ( {
 	const { parentClassName, parentName } = useInnerBlockLayoutContext();
 	const totalQuery = extractPaginationAndSortAttributes( queryState );
 	const { dispatchStoreEvent } = useStoreEvents();
+
+	const [ productsTaxonomyId, setArchiveTaxonomyId ] = useQueryStateByKey(
+		'product_cat',
+		[]
+	);
+	if( archiveTaxonomyId ){
+		setArchiveTaxonomyId( [ archiveTaxonomyId ] )
+	}else{
+		setArchiveTaxonomyId( [] )
+	}
 
 	// These are possible filters.
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
@@ -231,6 +242,7 @@ const ProductList = ( {
 	const hasFilters =
 		productAttributes.length > 0 ||
 		productStockStatus.length > 0 ||
+		productsTaxonomyId.length > 0 ||
 		Number.isFinite( minPrice ) ||
 		Number.isFinite( maxPrice );
 
@@ -247,6 +259,7 @@ const ProductList = ( {
 					resetCallback={ () => {
 						setProductAttributes( [] );
 						setProductStockStatus( [] );
+						setArchiveTaxonomyId( [] );
 						setMinPrice( null );
 						setMaxPrice( null );
 					} }
