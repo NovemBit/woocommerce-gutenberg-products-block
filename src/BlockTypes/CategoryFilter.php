@@ -29,7 +29,7 @@ class CategoryFilter extends AbstractBlock
 			'hierarchical' => true,
 //			'orderby'    => $orderby,
 //			'order'      => $order,
-			'hide_empty' => false,
+			'hide_empty' => true,
 			'fields'     => 'all',
 		);
 		$product_categories       = get_terms($args);

@@ -147,8 +147,6 @@ const CheckboxListHierarchical = ( {
 		);
 	}
 
-	console.log(options);
-
 	const renderedOptions = useMemo(
 		() => tmp(options.filter(o => Number(o.parent) === 0)),
 		[
