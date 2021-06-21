@@ -29,16 +29,6 @@ const initialOptions = Object.entries(
 	CATEGORY_OPTIONS
 ).map(([id, cat]) => ({id, cat}));
 
-const childParentMap = Object.entries(
-	CATEGORY_OPTIONS
-).map(([id, cat]) => {
-		let parent = cat.parent;
-		let category = Number(id);
-		let name = cat.name;
-		return {category, name, parent};
-	}
-);
-
 /**
  * Component displaying an stock status filter.
  *
@@ -84,41 +74,6 @@ const CategoryFilterBlock = ({
 		[filteredCounts]
 	);
 
-	const getAncestors = (id, ancestors = [], count) => {
-		const cat = childParentMap.find(cat => cat.category === id);
-		if (cat) {
-			ancestors.push({
-				value: cat.category.toString(),
-				name: decodeEntities(cat.name),
-				parent: cat.parent,
-				label: <Label
-					name={decodeEntities(cat.name)}
-					count={blockAttributes.showCounts ? count : null}
-				/>
-			});
-			if (cat.parent) {
-				ancestors = getAncestors(cat.parent, ancestors, count);
-			}
-		}
-
-		return ancestors;
-	};
-
-	const fixHierarchy = ( optionsToFix ) => {
-		console.log( 'childParentMap',childParentMap )
-		console.log( 'optionsToFix',optionsToFix )
-		if( childParentMap.length === optionsToFix.length ){
-			return optionsToFix;
-		}
-
-		const tree = [];
-		optionsToFix.map(o => {
-			tree.push(o, ...getAncestors(Number(o.parent), [], o.label.props.count ?? 0));
-		});
-
-		const set = new Set(tree.map(t => t.value));
-		return [...set].map(i => tree.find(t => t.value === i));
-	}
 	/**
 	 * Compare intersection of all stock statuses and filtered counts to get a list of options to display.
 	 */
@@ -167,8 +122,8 @@ const CategoryFilterBlock = ({
 				};
 			})
 			.filter(Boolean);
-		const fixedHierarchy = fixHierarchy( newOptions );
-		setDisplayedOptions(fixedHierarchy);
+
+		setDisplayedOptions(newOptions);
 	}, [
 		blockAttributes.showCounts,
 		blockAttributes.isPreview,
