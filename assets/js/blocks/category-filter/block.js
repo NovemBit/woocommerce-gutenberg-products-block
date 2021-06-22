@@ -133,16 +133,63 @@ const CategoryFilterBlock = ({
 		queryState.category,
 	]);
 
+	const getParents = ( checked, foundedChildes ) => {
+		for (const option of initialOptions) {
+			if( checked == option.id ){
+				if( !option.cat.parent ){
+					continue;
+				}
+				foundedChildes.push( option.cat.parent );
+				foundedChildes = getParents( option.cat.parent, foundedChildes )
+			}
+		}
+
+		return foundedChildes;
+	}
+
+	const getChildes = ( checked, foundedChildes ) => {
+		for (const option of initialOptions) {
+			if( checked == option.cat.parent ){
+				if( !option.id ){
+					continue;
+				}
+				foundedChildes.push( option.id );
+				foundedChildes = getChildes( option.id, foundedChildes )
+			}
+		}
+
+		return foundedChildes;
+	}
+
 	const onSubmit = useCallback(
 		(isChecked) => {
 			if (isEditor) {
 				return;
 			}
 			if (isChecked) {
-				setProductCategoryQuery(checked);
+				let newChecked = checked;
+				for (const checkedElement of checked) {
+					let catChildes = getChildes(checkedElement, []);
+					for (let catId of catChildes) {
+						catId = catId.toString();
+						if( productCategoryQuery.includes( catId ) && checked.includes( catId ) ){
+							const index = newChecked.indexOf(catId);
+							newChecked.splice(index, 1);
+						}
+					}
+					let catParents = getParents(checkedElement, []);
+					for (let catId of catParents) {
+						catId = catId.toString();
+						if( productCategoryQuery.includes( catId ) && checked.includes( catId ) ){
+							const index = newChecked.indexOf(catId);
+							newChecked.splice(index, 1);
+						}
+					}
+				}
+				setProductCategoryQuery(newChecked);
 			}
 		},
-		[isEditor, setProductCategoryQuery, checked]
+		[isEditor, productCategoryQuery, setProductCategoryQuery, checked]
 	);
 
 	// Track checked STATE changes - if state changes, update the query.

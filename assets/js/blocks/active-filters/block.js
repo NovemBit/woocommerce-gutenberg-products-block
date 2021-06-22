@@ -72,7 +72,6 @@ const ActiveFiltersBlock = ( {
 	const activeCategoryFilters = useMemo( () => {
 		if ( productCategoryQuery.length > 0 ) {
 			return productCategoryQuery.map( ( id ) => {
-				console.log(CATEGORY_OPTIONS[ id ])
 				return renderRemovableListItem( {
 					type: __( 'Category', 'woo-gutenberg-products-block' ),
 					name: CATEGORY_OPTIONS[ id ].name,
