@@ -203,7 +203,7 @@ class ProductQueryFilters
 				}
 			}
 		}
-//		var_dump( $id_count_map, $id_parent_map );die;
+
 		return $id_count_map;
 	}
 
