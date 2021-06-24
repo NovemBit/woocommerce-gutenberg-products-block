@@ -70,7 +70,7 @@ const ActiveFiltersBlock = ( {
 	] );
 	const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
 	const activeCategoryFilters = useMemo( () => {
-		if ( productCategoryQuery.length > 0 && CATEGORY_OPTIONS.length > 0 ) {
+		if ( productCategoryQuery.length > 0 ) {
 			return productCategoryQuery.map( ( id ) => {
 				return renderRemovableListItem( {
 					type: __( 'Category', 'woo-gutenberg-products-block' ),
