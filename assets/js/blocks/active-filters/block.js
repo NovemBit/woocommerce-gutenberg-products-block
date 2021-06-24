@@ -36,10 +36,10 @@ const ActiveFiltersBlock = ( {
 		'stock_status',
 		[]
 	);
-	const [ productCategoryQuery, setProductCategoryQuery ] = useQueryStateByKey(
-		'product_cat',
-		[]
-	);
+	const [
+		productCategoryQuery,
+		setProductCategoryQuery,
+	] = useQueryStateByKey( 'product_cat', [] );
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
 
@@ -68,9 +68,9 @@ const ActiveFiltersBlock = ( {
 		setProductStockStatus,
 		blockAttributes.displayStyle,
 	] );
-	const CATEGORY_OPTIONS = getSetting('categoryOptions', []);
+	const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
 	const activeCategoryFilters = useMemo( () => {
-		if ( productCategoryQuery.length > 0 ) {
+		if ( productCategoryQuery.length > 0 && CATEGORY_OPTIONS.length > 0 ) {
 			return productCategoryQuery.map( ( id ) => {
 				return renderRemovableListItem( {
 					type: __( 'Category', 'woo-gutenberg-products-block' ),

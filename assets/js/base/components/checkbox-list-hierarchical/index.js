@@ -27,6 +27,7 @@ const CheckboxListHierarchical = ( {
 	className,
 	onChange = () => {},
 	options = [],
+	topParent = 0,
 	checked = [],
 	isLoading = false,
 	isDisabled = false,
@@ -148,9 +149,10 @@ const CheckboxListHierarchical = ( {
 	}
 
 	const renderedOptions = useMemo(
-		() => tmp(options.filter(o => Number(o.parent) === 0)),
+		() => tmp(options.filter(o => Number(o.parent) === topParent)),
 		[
 			options,
+			topParent,
 			onChange,
 			checked,
 			showExpanded,
@@ -185,6 +187,7 @@ CheckboxListHierarchical.propTypes = {
 			value: PropTypes.string.isRequired,
 		} )
 	),
+	topParent: PropTypes.number,
 	checked: PropTypes.array,
 	className: PropTypes.string,
 	isLoading: PropTypes.bool,

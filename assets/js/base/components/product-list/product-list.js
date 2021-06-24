@@ -26,6 +26,7 @@ import NoMatchingProducts from './no-matching-products';
 import ProductSortSelect from './product-sort-select';
 import ProductListItem from './product-list-item';
 import './style.scss';
+import {getSetting} from "@woocommerce/settings";
 
 const generateQuery = ( {
 	sortValue,
@@ -76,12 +77,15 @@ const generateQuery = ( {
 		setProductStockStatus( newStockStatus );
 	}
 
+	const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
+
 	return {
 		...getSortArgs( sortValue ),
 		catalog_visibility: 'catalog',
 		per_page: columns * rows,
 		page: currentPage,
-		stock_status: productStockStatus
+		stock_status: productStockStatus,
+		category: archiveTaxonomyId
 	};
 };
 
@@ -136,7 +140,6 @@ const ProductList = ( {
 	sortValue,
 	scrollToTop,
 	hideOutOfStockItems = false,
-	archiveTaxonomyId
 } ) => {
 	const [ queryState ] = useSynchronizedQueryState(
 		generateQuery( {
@@ -153,15 +156,10 @@ const ProductList = ( {
 	const totalQuery = extractPaginationAndSortAttributes( queryState );
 	const { dispatchStoreEvent } = useStoreEvents();
 
-	const [ productsTaxonomyId, setArchiveTaxonomyId ] = useQueryStateByKey(
+	const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
 		'product_cat',
 		[]
 	);
-	if( archiveTaxonomyId ){
-		setArchiveTaxonomyId( [ archiveTaxonomyId ] )
-	}else{
-		setArchiveTaxonomyId( productsTaxonomyId )
-	}
 
 	// These are possible filters.
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
@@ -242,7 +240,7 @@ const ProductList = ( {
 	const hasFilters =
 		productAttributes.length > 0 ||
 		productStockStatus.length > 0 ||
-		productsTaxonomyId.length > 0 ||
+		productsTaxonomyIds.length > 0 ||
 		Number.isFinite( minPrice ) ||
 		Number.isFinite( maxPrice );
 

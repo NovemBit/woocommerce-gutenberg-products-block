@@ -12,7 +12,6 @@ import ProductList from './product-list';
 const ProductListContainer = ( {
 	attributes,
 	hideOutOfStockItems = false,
-    archiveTaxonomyId
 } ) => {
 	const [ currentPage, setPage ] = useState( 1 );
 	const [ currentSort, setSort ] = useState( attributes.orderby );
@@ -33,7 +32,6 @@ const ProductListContainer = ( {
 		<ProductList
 			attributes={ attributes }
 			hideOutOfStockItems={ hideOutOfStockItems }
-			archiveTaxonomyId={ archiveTaxonomyId }
 			currentPage={ currentPage }
 			onPageChange={ onPageChange }
 			onSortChange={ onSortChange }

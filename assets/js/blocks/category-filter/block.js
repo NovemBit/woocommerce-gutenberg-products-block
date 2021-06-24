@@ -24,10 +24,36 @@ import {previewOptions} from './preview';
 import './style.scss';
 
 const CATEGORY_OPTIONS = getSetting('categoryOptions', []);
+const ARCHIVE_ID = getSetting('archiveTaxonomyId', []);
 
-const initialOptions = Object.entries(
+let initialOptions = Object.entries(
 	CATEGORY_OPTIONS
 ).map(([id, cat]) => ({id, cat}));
+if (ARCHIVE_ID) {
+	const getAllChildes = (archiveId, foundedChildes) => {
+		for (const option of initialOptions) {
+			if (archiveId == option.cat.parent) {
+				if (!option.id) {
+					continue;
+				}
+				foundedChildes.push(option.id);
+				foundedChildes = getAllChildes(option.id, foundedChildes)
+			}
+		}
+
+		return foundedChildes;
+	}
+	const archiveChildCats = getAllChildes(ARCHIVE_ID, []);
+	initialOptions = initialOptions.filter(cat => {
+		if (archiveChildCats.length > 0) {
+			for (const archiveChildCat of archiveChildCats) {
+				if (cat.id == archiveChildCat) {
+					return cat;
+				}
+			}
+		}
+	})
+}
 
 /**
  * Component displaying an stock status filter.
@@ -133,28 +159,28 @@ const CategoryFilterBlock = ({
 		queryState.category,
 	]);
 
-	const getParents = ( checked, foundedChildes ) => {
+	const getParents = (checked, foundedChildes) => {
 		for (const option of initialOptions) {
-			if( checked == option.id ){
-				if( !option.cat.parent ){
+			if (checked == option.id) {
+				if (!option.cat.parent) {
 					continue;
 				}
-				foundedChildes.push( option.cat.parent );
-				foundedChildes = getParents( option.cat.parent, foundedChildes )
+				foundedChildes.push(option.cat.parent);
+				foundedChildes = getParents(option.cat.parent, foundedChildes)
 			}
 		}
 
 		return foundedChildes;
 	}
 
-	const getChildes = ( checked, foundedChildes ) => {
+	const getChildes = (checked, foundedChildes) => {
 		for (const option of initialOptions) {
-			if( checked == option.cat.parent ){
-				if( !option.id ){
+			if (checked == option.cat.parent) {
+				if (!option.id) {
 					continue;
 				}
-				foundedChildes.push( option.id );
-				foundedChildes = getChildes( option.id, foundedChildes )
+				foundedChildes.push(option.id);
+				foundedChildes = getChildes(option.id, foundedChildes)
 			}
 		}
 
@@ -172,7 +198,7 @@ const CategoryFilterBlock = ({
 					let catChildes = getChildes(checkedElement, []);
 					for (let catId of catChildes) {
 						catId = catId.toString();
-						if( productCategoryQuery.includes( catId ) && checked.includes( catId ) ){
+						if (productCategoryQuery.includes(catId) && checked.includes(catId)) {
 							const index = newChecked.indexOf(catId);
 							newChecked.splice(index, 1);
 						}
@@ -180,7 +206,7 @@ const CategoryFilterBlock = ({
 					let catParents = getParents(checkedElement, []);
 					for (let catId of catParents) {
 						catId = catId.toString();
-						if( productCategoryQuery.includes( catId ) && checked.includes( catId ) ){
+						if (productCategoryQuery.includes(catId) && checked.includes(catId)) {
 							const index = newChecked.indexOf(catId);
 							newChecked.splice(index, 1);
 						}
@@ -301,27 +327,34 @@ const CategoryFilterBlock = ({
 
 	return (
 		<>
-			{!isEditor && blockAttributes.heading && (
-				<TagName>{blockAttributes.heading}</TagName>
-			)}
-			<div className="wc-block-category-filter">
-				<CheckboxListHierarchical
-					className={'wc-block-category-filter-list'}
-					options={displayedOptions}
-					checked={checked}
-					onChange={onChange}
-					isLoading={isLoading}
-					isDisabled={isDisabled}
-					limit={5}
-				/>
-				{blockAttributes.showFilterButton && (
-					<FilterSubmitButton
-						className="wc-block-category-filter__button"
-						disabled={isLoading || isDisabled}
-						onClick={() => onSubmit(checked)}
-					/>
-				)}
-			</div>
+			{
+				initialOptions.length !== 0 && (
+					<>
+						{!isEditor && blockAttributes.heading && (
+							<TagName>{blockAttributes.heading}</TagName>
+						)}
+						<div className="wc-block-category-filter">
+							<CheckboxListHierarchical
+								className={'wc-block-category-filter-list'}
+								options={displayedOptions}
+								topParent={ARCHIVE_ID ? Number(ARCHIVE_ID) : 0}
+								checked={checked}
+								onChange={onChange}
+								isLoading={isLoading}
+								isDisabled={isDisabled}
+								limit={5}
+							/>
+							{blockAttributes.showFilterButton && (
+								<FilterSubmitButton
+									className="wc-block-category-filter__button"
+									disabled={isLoading || isDisabled}
+									onClick={() => onSubmit(checked)}
+								/>
+							)}
+						</div>
+					</>
+				)
+			}
 		</>
 	);
 };
