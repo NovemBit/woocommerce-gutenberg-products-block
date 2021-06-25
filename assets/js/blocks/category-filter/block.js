@@ -223,7 +223,7 @@ const CategoryFilterBlock = ({
 		if (!blockAttributes.showFilterButton) {
 			onSubmit(checked);
 		}
-	}, [blockAttributes.showFilterButton, checked, onSubmit]);
+	}, [blockAttributes.showFilterButton, checked]);
 
 	const checkedQuery = useMemo(() => {
 		return productCategoryQuery;
