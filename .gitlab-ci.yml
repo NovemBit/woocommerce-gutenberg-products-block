@@ -29,7 +29,7 @@ deploy:
   only:
     - develop
   script:
-    -  dp 188.34.206.116 2099 develop
+    - dp 188.34.206.116 2099 develop
   dependencies:
     - build
 
@@ -38,7 +38,26 @@ deploy:nebeauty:
   only:
     - develop
   script:
-    -  dp 188.34.206.116 2322 develop
+    - dp 188.34.206.116 2322 develop
+    - dp 188.34.206.116 23022 develop # with novembit-i18n
+  dependencies:
+    - build
+
+deploy:noorb:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 23122 develop
+  dependencies:
+    - build
+
+deploy:novembit:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 2822 develop
   dependencies:
     - build
 
@@ -47,8 +66,12 @@ deploy:dev-groups:
   only:
     - develop
   script:
-    -  dp 188.34.206.116 2422 develop # backend
-    -  dp 188.34.206.116 2522 develop # frontend
-    -  dp 188.34.206.116 2822 develop # frontend
+    - dp 188.34.206.116 2422 develop # backend
+    - dp 188.34.206.116 2522 develop # frontend
+    - dp 188.34.206.116 2622 develop # erik
+    - dp 188.34.206.116 2722 develop # aaron
+    - dp 188.34.206.116 3022 develop # i18n
+    - dp 188.34.206.116 21022 develop # ani
   dependencies:
     - build
+
