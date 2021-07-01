@@ -52,7 +52,7 @@ const CheckboxListHierarchical = ( {
 		const remainingOptionsCount = optionCount - limit;
 		return (
 			! showExpanded && (
-				<li key="show-more" className="show-more">
+				<li key="show-more" className="wc-block-category-filter__more">
 					<button
 						onClick={ () => {
 							setShowExpanded( true );
@@ -88,7 +88,7 @@ const CheckboxListHierarchical = ( {
 	const renderedShowLess = useMemo( () => {
 		return (
 			showExpanded && (
-				<li key="show-less" className="show-less">
+				<li key="show-less" className="wc-block-category-filter__less">
 					<button
 						onClick={ () => {
 							setShowExpanded( false );
@@ -116,26 +116,30 @@ const CheckboxListHierarchical = ( {
 				{ currentOptions.map( ( option, index ) => {
 					const children = options.filter(o => Number(o.parent) === Number(option.value));
 					return <Fragment key={ option.value }>
-						<li
+						<li	className='wc-block-category-filter__li'
 							{ ...( shouldTruncateOptions &&
 								! showExpanded &&
 								index >= limit && { hidden: true } ) }
 						>
-							<input
-								type="checkbox"
-								id={ option.value }
-								value={ option.value }
-								onChange={ ( event ) => {
-									onChange( event.target.value );
-								} }
-								checked={ checked.includes( option.value ) }
-								disabled={ isDisabled }
-							/>
-							<label htmlFor={ option.value }>
-								{ option.label }
-							</label>
+							<div className='wc-block-category-filter__item'>
+								<input
+										className='wc-block-category-filter__checkbox'
+										type="checkbox"
+										id={ option.value }
+										value={ option.value }
+										onChange={ ( event ) => {
+											onChange( event.target.value );
+										} }
+										checked={ checked.includes( option.value ) }
+										disabled={ isDisabled }
+									/>
+								<label className='wc-block-category-filter__label'
+									htmlFor={ option.value }>								
+									{ option.label }
+								</label>
+							</div>
 							{
-								(children.length > 0) && <ul>{tmp(children, ++depth)}</ul>
+								(children.length > 0) && <ul className='wc-block-category-filter__sublist'>{tmp(children, ++depth)}</ul>
 							}
 						</li>
 						{ shouldTruncateOptions &&
