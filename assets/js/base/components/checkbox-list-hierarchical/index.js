@@ -52,7 +52,7 @@ const CheckboxListHierarchical = ( {
 		const remainingOptionsCount = optionCount - limit;
 		return (
 			! showExpanded && (
-				<li key="show-more" className="wc-block-checkbox-list__more">
+				<li key="show-more" className="show-more">
 					<button
 						onClick={ () => {
 							setShowExpanded( true );
@@ -88,7 +88,7 @@ const CheckboxListHierarchical = ( {
 	const renderedShowLess = useMemo( () => {
 		return (
 			showExpanded && (
-				<li key="show-less" className="wc-block-checkbox-list__less">
+				<li key="show-less" className="show-less">
 					<button
 						onClick={ () => {
 							setShowExpanded( false );
