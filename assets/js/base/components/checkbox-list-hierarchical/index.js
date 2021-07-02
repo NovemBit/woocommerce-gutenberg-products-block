@@ -52,7 +52,7 @@ const CheckboxListHierarchical = ( {
 		const remainingOptionsCount = optionCount - limit;
 		return (
 			! showExpanded && (
-				<li key="show-more" className="wc-block-category-filter__more">
+				<li key="show-more" className="wc-block-checkbox-list__more">
 					<button
 						onClick={ () => {
 							setShowExpanded( true );
@@ -88,7 +88,7 @@ const CheckboxListHierarchical = ( {
 	const renderedShowLess = useMemo( () => {
 		return (
 			showExpanded && (
-				<li key="show-less" className="wc-block-category-filter__less">
+				<li key="show-less" className="wc-block-checkbox-list__less">
 					<button
 						onClick={ () => {
 							setShowExpanded( false );
@@ -116,14 +116,14 @@ const CheckboxListHierarchical = ( {
 				{ currentOptions.map( ( option, index ) => {
 					const children = options.filter(o => Number(o.parent) === Number(option.value));
 					return <Fragment key={ option.value }>
-						<li	className='wc-block-category-filter__li'
+						<li	className='wc-block-checkbox-list__li'
 							{ ...( shouldTruncateOptions &&
 								! showExpanded &&
 								index >= limit && { hidden: true } ) }
 						>
-							<div className='wc-block-category-filter__item'>
+							<div className='wc-block-checkbox-list__item'>
 								<input
-										className='wc-block-category-filter__checkbox'
+										className='wc-block-checkbox-list__checkbox'
 										type="checkbox"
 										id={ option.value }
 										value={ option.value }
@@ -133,13 +133,13 @@ const CheckboxListHierarchical = ( {
 										checked={ checked.includes( option.value ) }
 										disabled={ isDisabled }
 									/>
-								<label className='wc-block-category-filter__label'
-									htmlFor={ option.value }>								
+								<label className='wc-block-checkbox-list__label'
+									htmlFor={ option.value }>
 									{ option.label }
 								</label>
 							</div>
 							{
-								(children.length > 0) && <ul className='wc-block-category-filter__sublist'>{tmp(children, ++depth)}</ul>
+								(children.length > 0) && <ul className='wc-block-checkbox-list__sublist'>{tmp(children, ++depth)}</ul>
 							}
 						</li>
 						{ shouldTruncateOptions &&
