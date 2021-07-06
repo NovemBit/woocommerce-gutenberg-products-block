@@ -118,12 +118,27 @@ const Image = ( { image, onLoad, loaded, showFullSize, fallbackAlt } ) => {
 	let width_woocommerce_thumbnail = '';
 	let height_full = '';
 	let height_woocommerce_thumbnail = '';
+	let srcset_full = srcset;
+	let srcset_woocommerce_thumbnail = srcset;
+	let sizes_full = sizes;
+	let sizes_woocommerce_thumbnail = sizes;
 	if( width !== undefined && height !== undefined ){
 		width_full = width.full;
 		width_woocommerce_thumbnail = width.woocommerce_thumbnail;
 		height_full = height.full;
 		height_woocommerce_thumbnail = height.woocommerce_thumbnail;
 	}
+
+	if( srcset.hasOwnProperty( 'full' ) && srcset.hasOwnProperty( 'woocommerce_thumbnail' ) ){
+		srcset_full = srcset.full;
+		srcset_woocommerce_thumbnail = srcset.woocommerce_thumbnail;
+	}
+
+	if( sizes.hasOwnProperty( 'full' ) && sizes.hasOwnProperty( 'woocommerce_thumbnail' ) ){
+		sizes_full = sizes.full;
+		sizes_woocommerce_thumbnail = sizes.woocommerce_thumbnail;
+	}
+
 	const imageProps = {
 		alt: alt || fallbackAlt,
 		onLoad,
@@ -131,7 +146,9 @@ const Image = ( { image, onLoad, loaded, showFullSize, fallbackAlt } ) => {
 		src: thumbnail,
 		width: width_woocommerce_thumbnail,
 		height: height_woocommerce_thumbnail,
-		...( showFullSize && { src, width: width_full, height: height_full, srcSet: srcset, sizes } ),
+		srcSet: srcset_woocommerce_thumbnail,
+		sizes: sizes_woocommerce_thumbnail,
+		...( showFullSize && { src, width: width_full, height: height_full, srcSet: srcset_full, sizes: sizes_full } ),
 	};
 
 	return (

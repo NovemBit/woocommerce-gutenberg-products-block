@@ -107,14 +107,24 @@ class ImageAttachmentSchema extends AbstractSchema {
 			'woocommerce_thumbnail' => $thumbnail[2],
 		];
 
+		$srcset = [
+			'full' => (string) wp_get_attachment_image_srcset( $attachment_id, 'full' ),
+			'woocommerce_thumbnail' => (string) wp_get_attachment_image_srcset( $attachment_id, 'woocommerce_thumbnail' ),
+		];
+
+		$sizes = [
+			'full' => (string) wp_get_attachment_image_sizes( $attachment_id, 'full' ),
+			'woocommerce_thumbnail' => (string) wp_get_attachment_image_sizes( $attachment_id, 'woocommerce_thumbnail' ),
+		];
+
 		return [
 			'id'        => (int) $attachment_id,
 			'src'       => current( $attachment ),
 			'thumbnail' => current( $thumbnail ),
 			'width'     => $width,
 			'height'    => $height,
-			'srcset'    => (string) wp_get_attachment_image_srcset( $attachment_id, 'full' ),
-			'sizes'     => (string) wp_get_attachment_image_sizes( $attachment_id, 'full' ),
+			'srcset'    => $srcset,
+			'sizes'     => $sizes,
 			'name'      => get_the_title( $attachment_id ),
 			'alt'       => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
 		];
