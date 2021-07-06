@@ -13,6 +13,7 @@ import {
 	useStoreProducts,
 	useSynchronizedQueryState,
 	useQueryStateByKey,
+	useCollectionData,
 } from '@woocommerce/base-context/hooks';
 import withScrollToTop from '@woocommerce/base-hocs/with-scroll-to-top';
 import { useInnerBlockLayoutContext } from '@woocommerce/shared-context';
@@ -149,6 +150,10 @@ const ProductList = ( {
 			hideOutOfStockItems,
 		} )
 	);
+	const {
+		isLoading: filteredCountsLoading,
+	} = useCollectionData( queryState );
+
 	const { products, totalProducts, productsLoading } = useStoreProducts(
 		queryState
 	);
@@ -213,10 +218,12 @@ const ProductList = ( {
 	const getClassnames = () => {
 		const { columns, rows, alignButtons, align } = attributes;
 		const alignClass = typeof align !== 'undefined' ? 'align' + align : '';
+		let shopLoaded = filteredCountsLoading ? '' : 'wc-store-loaded';
 
 		return classnames(
 			parentClassName,
 			alignClass,
+			shopLoaded,
 			'has-' + columns + '-columns',
 			{
 				'has-multiple-rows': rows > 1,
