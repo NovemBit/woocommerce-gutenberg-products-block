@@ -129,12 +129,12 @@ const Image = ( { image, onLoad, loaded, showFullSize, fallbackAlt } ) => {
 		height_woocommerce_thumbnail = height.woocommerce_thumbnail;
 	}
 
-	if( srcset.hasOwnProperty( 'full' ) && srcset.hasOwnProperty( 'woocommerce_thumbnail' ) ){
+	if( typeof srcset === "object" && srcset.hasOwnProperty( 'full' ) && srcset.hasOwnProperty( 'woocommerce_thumbnail' ) ){
 		srcset_full = srcset.full;
 		srcset_woocommerce_thumbnail = srcset.woocommerce_thumbnail;
 	}
 
-	if( sizes.hasOwnProperty( 'full' ) && sizes.hasOwnProperty( 'woocommerce_thumbnail' ) ){
+	if( typeof sizes === "object" && sizes.hasOwnProperty( 'full' ) && sizes.hasOwnProperty( 'woocommerce_thumbnail' ) ){
 		sizes_full = sizes.full;
 		sizes_woocommerce_thumbnail = sizes.woocommerce_thumbnail;
 	}
