@@ -114,14 +114,24 @@ const ImagePlaceholder = () => {
 
 const Image = ( { image, onLoad, loaded, showFullSize, fallbackAlt } ) => {
 	const { thumbnail, width, height, src, srcset, sizes, alt } = image || {};
+	let width_full = '';
+	let width_woocommerce_thumbnail = '';
+	let height_full = '';
+	let height_woocommerce_thumbnail = '';
+	if( width !== undefined && height !== undefined ){
+		width_full = width.full;
+		width_woocommerce_thumbnail = width.woocommerce_thumbnail;
+		height_full = height.full;
+		height_woocommerce_thumbnail = height.woocommerce_thumbnail;
+	}
 	const imageProps = {
 		alt: alt || fallbackAlt,
 		onLoad,
 		hidden: ! loaded,
 		src: thumbnail,
-		width: width.woocommerce_thumbnail,
-		height: height.woocommerce_thumbnail,
-		...( showFullSize && { src,width: width.full, height: height.full, srcSet: srcset, sizes } ),
+		width: width_woocommerce_thumbnail,
+		height: height_woocommerce_thumbnail,
+		...( showFullSize && { src, width: width_full, height: height_full, srcSet: srcset, sizes } ),
 	};
 
 	return (

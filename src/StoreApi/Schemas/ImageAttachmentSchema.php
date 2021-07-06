@@ -45,6 +45,16 @@ class ImageAttachmentSchema extends AbstractSchema {
 				'format'      => 'uri',
 				'context'     => [ 'view', 'edit' ],
 			],
+			'width'     => [
+				'description' => __( 'Image width sizes for "full" and "woocommerce_thumbnail" crop sizes.', 'woo-gutenberg-products-block' ),
+				'type'        => 'object',
+				'context'     => [ 'view', 'edit' ],
+			],
+			'height'     => [
+				'description' => __( 'Image height sizes for "full" and "woocommerce_thumbnail" crop sizes.', 'woo-gutenberg-products-block' ),
+				'type'        => 'object',
+				'context'     => [ 'view', 'edit' ],
+			],
 			'srcset'    => [
 				'description' => __( 'Thumbnail srcset for responsive images.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
