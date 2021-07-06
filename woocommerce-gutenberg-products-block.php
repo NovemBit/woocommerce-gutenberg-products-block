@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Blocks Fork
  * Plugin URI: https://github.com/NovemBit/woocommerce-gutenberg-products-block-fork
  * Description: WooCommerce blocks for the Gutenberg editor.
- * Version: 5.5.0-dev
+ * Version: 5.5.0
  * Author: Automattic
  * Author URI: https://woocommerce.com
  * Text Domain:  woo-gutenberg-products-block
