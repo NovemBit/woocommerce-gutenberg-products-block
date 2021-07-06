@@ -113,13 +113,15 @@ const ImagePlaceholder = () => {
 };
 
 const Image = ( { image, onLoad, loaded, showFullSize, fallbackAlt } ) => {
-	const { thumbnail, src, srcset, sizes, alt } = image || {};
+	const { thumbnail, width, height, src, srcset, sizes, alt } = image || {};
 	const imageProps = {
 		alt: alt || fallbackAlt,
 		onLoad,
 		hidden: ! loaded,
 		src: thumbnail,
-		...( showFullSize && { src, srcSet: srcset, sizes } ),
+		width: width.woocommerce_thumbnail,
+		height: height.woocommerce_thumbnail,
+		...( showFullSize && { src,width: width.full, height: height.full, srcSet: srcset, sizes } ),
 	};
 
 	return (
