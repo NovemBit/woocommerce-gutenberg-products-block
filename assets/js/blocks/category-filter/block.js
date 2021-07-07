@@ -110,10 +110,11 @@ const CategoryFilterBlock = ( {
 		 * @param {string} queryStatus The status slug to check.
 		 */
 		const isCategoryInQueryState = ( queryStatus ) => {
-			if ( ! queryState?.category ) {
+			if ( ! queryState?.product_cat ) {
 				return false;
 			}
-			return queryState.category.some( ( { category = [] } ) =>
+
+			return queryState.product_cat.some( ( { category = [] } ) =>
 				category.includes( queryStatus )
 			);
 		};
