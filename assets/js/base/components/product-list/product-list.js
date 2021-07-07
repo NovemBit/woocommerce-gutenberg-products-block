@@ -150,14 +150,6 @@ const ProductList = ( {
 			hideOutOfStockItems,
 		} )
 	);
-	const { isLoading: filteredCountsLoading } = useCollectionData(
-		queryState
-	);
-
-	if ( ! filteredCountsLoading ) {
-		document.body.classList.add( 'wc-shop-loaded' );
-	}
-
 	const { products, totalProducts, productsLoading } = useStoreProducts(
 		queryState
 	);
