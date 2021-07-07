@@ -27,7 +27,7 @@ import NoMatchingProducts from './no-matching-products';
 import ProductSortSelect from './product-sort-select';
 import ProductListItem from './product-list-item';
 import './style.scss';
-import {getSetting} from "@woocommerce/settings";
+import { getSetting } from '@woocommerce/settings';
 
 const generateQuery = ( {
 	sortValue,
@@ -86,7 +86,7 @@ const generateQuery = ( {
 		per_page: columns * rows,
 		page: currentPage,
 		stock_status: productStockStatus,
-		category: archiveTaxonomyId
+		category: archiveTaxonomyId,
 	};
 };
 
@@ -150,9 +150,13 @@ const ProductList = ( {
 			hideOutOfStockItems,
 		} )
 	);
-	const {
-		isLoading: filteredCountsLoading,
-	} = useCollectionData( queryState );
+	const { isLoading: filteredCountsLoading } = useCollectionData(
+		queryState
+	);
+
+	if ( ! filteredCountsLoading ) {
+		document.body.classList.add( 'wc-shop-loaded' );
+	}
 
 	const { products, totalProducts, productsLoading } = useStoreProducts(
 		queryState
@@ -218,12 +222,10 @@ const ProductList = ( {
 	const getClassnames = () => {
 		const { columns, rows, alignButtons, align } = attributes;
 		const alignClass = typeof align !== 'undefined' ? 'align' + align : '';
-		let shopLoaded = filteredCountsLoading ? '' : 'wc-store-loaded';
 
 		return classnames(
 			parentClassName,
 			alignClass,
-			shopLoaded,
 			'has-' + columns + '-columns',
 			{
 				'has-multiple-rows': rows > 1,
