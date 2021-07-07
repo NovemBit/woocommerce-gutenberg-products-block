@@ -154,7 +154,8 @@ const ProductList = ( {
 		queryState
 	);
 
-	if ( ! filteredCountsLoading ) {
+	if ( !filteredCountsLoading ) {
+		document.body.classList.remove( 'wc-shop-loading' );
 		document.body.classList.add( 'wc-shop-loaded' );
 	}
 
