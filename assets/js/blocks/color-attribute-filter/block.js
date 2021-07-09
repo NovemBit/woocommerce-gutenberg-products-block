@@ -15,6 +15,7 @@ import FilterSubmitButton from '@woocommerce/base-components/filter-submit-butto
 import isShallowEqual from '@wordpress/is-shallow-equal';
 import { decodeEntities } from '@wordpress/html-entities';
 import { ColorIndicator } from '@wordpress/components';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies
@@ -33,9 +34,9 @@ import './style.scss';
  * @param {boolean} props.isEditor
  */
 const AttributeFilterBlock = ( {
-	attributes: blockAttributes,
-	isEditor = false,
-} ) => {
+								   attributes: blockAttributes,
+								   isEditor = false,
+							   } ) => {
 	const attributeObject =
 		blockAttributes.isPreview && ! blockAttributes.attributeId
 			? previewAttributeObject
@@ -336,16 +337,16 @@ const AttributeFilterBlock = ( {
 			<div className="wc-block-color-attribute-filter">
 				<ul className="wc-block-color-attribute-filter__list">
 					{ isEditor &&
-						displayedOptions.map( ( option ) => (
-							<ColorIndicator
-								colorValue={ option.code }
-								key={ option.value }
-							/>
-						) )
+					displayedOptions.map( ( option ) => (
+						<ColorIndicator
+							colorValue={ option.code }
+							key={ option.value }
+						/>
+					) )
 					}
 					{ ! isEditor &&
-						displayedOptions.map( ( option, index ) => (
-							<li className="wc-block-color-attribute-filter__list-item">
+					displayedOptions.map( ( option, index ) => (
+						<li className={classNames("wc-block-color-attribute-filter__list-item", {"is-active" : checked.includes(option.value)})}>
 								<span
 									className="wc-block-color-attribute-filter__color"
 									style={ {backgroundColor: option.code} }
@@ -356,8 +357,8 @@ const AttributeFilterBlock = ( {
 									onKeyDown={ () => onChange( option.value ) }
 									onClick={ () => onChange( option.value ) }
 								/>
-							</li>
-						) )
+						</li>
+					) )
 					}
 				</ul>
 				{ blockAttributes.showFilterButton && (
