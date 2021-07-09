@@ -334,32 +334,32 @@ const AttributeFilterBlock = ( {
 				<TagName>{ blockAttributes.heading }</TagName>
 			) }
 			<div className="wc-block-color-attribute-filter">
-				{ isEditor &&
-					displayedOptions.map( ( option ) => (
-						<ColorIndicator
-							colorValue={ option.code }
-							key={ option.value }
-						/>
-					) ) }
-				{ ! isEditor &&
-					displayedOptions.map( ( option, index ) => (
-						<span
-							style={ {
-								display: 'inline-block',
-								marginRight: '5px',
-								cursor: 'pointer',
-								backgroundColor: option.code,
-								width: '30px',
-								height: '30px',
-								borderRadius: '50%',
-							} }
-							key={ option.value }
-							role={ 'button' }
-							tabIndex={ index }
-							onKeyDown={ () => onChange( option.value ) }
-							onClick={ () => onChange( option.value ) }
-						/>
-					) ) }
+				<ul className="wc-block-color-attribute-filter__list">
+					{ isEditor &&
+						displayedOptions.map( ( option ) => (
+							<ColorIndicator
+								colorValue={ option.code }
+								key={ option.value }
+							/>
+						) )
+					}
+					{ ! isEditor &&
+						displayedOptions.map( ( option, index ) => (
+							<li className="wc-block-color-attribute-filter__list-item">
+								<span
+									className="wc-block-color-attribute-filter__color"
+									style={ {backgroundColor: option.code} }
+									key={ option.value }
+									role={ 'button' }
+									tabIndex={ index }
+									title={option.label.props.name}
+									onKeyDown={ () => onChange( option.value ) }
+									onClick={ () => onChange( option.value ) }
+								/>
+							</li>
+						) )
+					}
+				</ul>
 				{ blockAttributes.showFilterButton && (
 					<FilterSubmitButton
 						className="wc-block-color-attribute-filter__button"
