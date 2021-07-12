@@ -12,6 +12,7 @@ import ProductList from './product-list';
 const ProductListContainer = ( {
 	attributes,
 	hideOutOfStockItems = false,
+	isEditor = false
 } ) => {
 	const [ currentPage, setPage ] = useState( 1 );
 	const [ currentSort, setSort ] = useState( attributes.orderby );
@@ -36,6 +37,7 @@ const ProductListContainer = ( {
 			onPageChange={ onPageChange }
 			onSortChange={ onSortChange }
 			sortValue={ currentSort }
+			isEditor={isEditor}
 		/>
 	);
 };

@@ -175,7 +175,7 @@ const ProductList = ( {
 	);
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
-	console.log( isEditor );
+
 	if ( ! isEditor ) {
 		generateUrlParams(
 			queryState,
