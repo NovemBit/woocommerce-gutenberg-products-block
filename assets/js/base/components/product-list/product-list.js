@@ -28,6 +28,7 @@ import ProductSortSelect from './product-sort-select';
 import ProductListItem from './product-list-item';
 import './style.scss';
 import { getSetting } from '@woocommerce/settings';
+import { generateUrlParams } from './url-params';
 
 const generateQuery = ( {
 	sortValue,
@@ -141,6 +142,7 @@ const ProductList = ( {
 	sortValue,
 	scrollToTop,
 	hideOutOfStockItems = false,
+	isEditor = false,
 } ) => {
 	const [ queryState ] = useSynchronizedQueryState(
 		generateQuery( {
@@ -173,6 +175,18 @@ const ProductList = ( {
 	);
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
+	console.log( isEditor );
+	if ( ! isEditor ) {
+		generateUrlParams(
+			queryState,
+			productAttributes,
+			setArchiveTaxonomyId,
+			setProductStockStatus,
+			setProductAttributes,
+			setMinPrice,
+			setMaxPrice
+		);
+	}
 
 	// Only update previous query totals if the query is different and the total number of products is a finite number.
 	const previousQueryTotals = usePrevious(
