@@ -39,7 +39,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		let searchParams = url.searchParams;
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
-				if (key === 'product_cat') {
+				if (key === 'category') {
 					setProductCat(value.split(','));
 				} else if (key === 'stock_status') {
 					setStockStatus(value.split(','));
@@ -67,7 +67,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		let attributeObject = {};
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
-				if ( key !== 'product_cat' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price' ) {
+				if ( key !== 'category' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price' ) {
 					attributeObject['taxonomy'] = key.replace('filter_', 'pa_');
 					let termsSlugs = value.split(',');
 					let term, terms = [];
@@ -118,7 +118,11 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 						searchParams.set(to_push_attr + '_qt', attribute.operator)
 					}
 				} else {
-					searchParams.set(queryStateElement, queryState[queryStateElement])
+					if( queryStateElement === 'product_cat' ){
+						searchParams.set( 'category', queryState[queryStateElement])
+					}else{
+						searchParams.set(queryStateElement, queryState[queryStateElement])
+					}
 				}
 				searchParams = cleanURLSearchParams(searchParams);
 				url.search = searchParams.toString();
