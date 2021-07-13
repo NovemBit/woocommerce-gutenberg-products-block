@@ -15,12 +15,14 @@ let attributesParams = [];
 const cleanURLSearchParams = (urlParams) => {
 	let keysForDel = [];
 	urlParams.forEach((v, k) => {
-		if (v == '' || ( k.includes('filter') && !attributesParams.includes(k) ) ) {
+		k = encodeURIComponent(k)
+		if (v == '' || (k.includes('filter') && !attributesParams.includes(k))) {
 			keysForDel.push(k);
 		}
 	});
+
 	keysForDel.forEach(k => {
-		urlParams.delete(k);
+		urlParams.delete(decodeURIComponent(k));
 	});
 	return urlParams;
 }
@@ -35,7 +37,7 @@ const cleanURLSearchParams = (urlParams) => {
  */
 export const generateUrlParams = (queryState, productAttributes, setProductCat, setStockStatus, setAttributes, setMinPrice, setMaxPrice) => {
 	useEffect(() => {
-		const url = new URL(window.location.href);
+		const url = new URL(encodeURI(window.location.href));
 		let searchParams = url.searchParams;
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
@@ -52,44 +54,42 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		});
 	}, []);
 
-	const { results, isLoading } = useCollection( {
+	const {results, isLoading} = useCollection({
 		namespace: '/wc/store',
 		resourceName: 'products/attributes',
 		resourceValues: []
-	} );
+	});
 
 	useEffect(() => {
-		if ( isLoading ) {
+		if (isLoading) {
 			return;
 		}
 		const url = new URL(window.location.href);
 		let searchParams = url.searchParams;
-		let attributeObject = {};
+		let query = [];
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
-				if ( key !== 'category' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price' ) {
-					attributeObject['taxonomy'] = key.replace('filter_', 'pa_');
+				if (key !== 'category' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price') {
+					let attributeObject = {};
+
 					let termsSlugs = value.split(',');
 					let term, terms = [];
 					for (let i = 0; i < termsSlugs.length; i++) {
-						term = {};
-						term.slug = termsSlugs[i];
+						term = encodeURIComponent(termsSlugs[i]).toLowerCase();
 						terms.push(term)
 					}
-					updateAttributeFilter(
-						productAttributes,
-						setAttributes,
-						attributeObject,
-						terms,
-						searchParams.get(key + '_qt')
-					);
+					attributeObject['attribute'] = key.replace('filter_', 'pa_');
+					attributeObject['operator'] = searchParams.get(key + '_qt');
+					attributeObject['slug'] = terms;
+					query.push(attributeObject);
 				}
 			}
 		});
+		setAttributes(query);
 	}, [results, isLoading]);
 
 	useEffect(() => {
-		if ( isLoading ) {
+		if (isLoading) {
 			return;
 		}
 		const url = new URL(window.location.href);
@@ -107,20 +107,21 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					attributesParams = [];
 					for (const attribute of queryState[queryStateElement]) {
 						let to_push_attr = attribute.attribute.replace('pa_', 'filter_');
+						let encoded_to_push_attr = encodeURIComponent(to_push_attr);
 						//attribute
-						if (!attributesParams.includes(to_push_attr)) {
-							attributesParams.push(to_push_attr);
+						if (!attributesParams.includes(encoded_to_push_attr)) {
+							attributesParams.push(encoded_to_push_attr);
 						}
-						if (!attributesParams.includes(to_push_attr + '_qt')) {
-							attributesParams.push(to_push_attr + '_qt');
+						if (!attributesParams.includes(encoded_to_push_attr + '_qt')) {
+							attributesParams.push(encoded_to_push_attr + '_qt');
 						}
-						searchParams.set(to_push_attr, attribute.slug)
+						searchParams.set(to_push_attr, decodeURIComponent(attribute.slug).toLowerCase())
 						searchParams.set(to_push_attr + '_qt', attribute.operator)
 					}
 				} else {
-					if( queryStateElement === 'product_cat' ){
-						searchParams.set( 'category', queryState[queryStateElement])
-					}else{
+					if (queryStateElement === 'product_cat') {
+						searchParams.set('category', queryState[queryStateElement])
+					} else {
 						searchParams.set(queryStateElement, queryState[queryStateElement])
 					}
 				}
@@ -128,7 +129,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 				url.search = searchParams.toString();
 			}
 		}
-		const new_url = url.toString();
+		const new_url = decodeURI(url.toString());
 		if (new_url !== window.location.href) {
 			window.history.pushState("", "", new_url.replaceAll('%2C', ','));
 		}
