@@ -49,17 +49,12 @@ const StockStatusFilterBlock = ( {
 		}
 	};
 
-	const [ currentSort, setSort ] = useState( blockAttributes.orderby );
+	const [ currentSort, setSort ] = useState();
 	const [ queryState ] = useSynchronizedQueryState( {
 		...getSortArgs( currentSort ),
 	} );
 
 	const { products, productsLoading } = useStoreProducts( queryState );
-
-	useEffect( () => {
-		// if default sort is changed in editor
-		setSort( blockAttributes.orderby );
-	}, [ blockAttributes.orderby ] );
 
 	const onSortChange = ( event ) => {
 		const newSortValue = event.target.value;

@@ -41,12 +41,6 @@ registerBlockType( 'woocommerce/product-sorting', {
 			type: 'number',
 			default: 3,
 		},
-		/**
-		 * Order to use for the products listing.
-		 */
-		orderby: {
-			type: 'string',
-		},
 	},
 	edit,
 	// Save the props to post content.
@@ -55,7 +49,6 @@ registerBlockType( 'woocommerce/product-sorting', {
 		const data = {
 			'data-heading': heading,
 			'data-heading-level': headingLevel,
-			'data-orderby': orderby,
 		};
 		return (
 			<div

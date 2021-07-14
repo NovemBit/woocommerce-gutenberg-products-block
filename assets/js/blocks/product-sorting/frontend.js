@@ -14,7 +14,6 @@ const getProps = ( el ) => {
 		attributes: {
 			heading: el.dataset.heading,
 			headingLevel: el.dataset.headingLevel || 3,
-			orderby: el.dataset.orderby,
 		},
 	};
 };
