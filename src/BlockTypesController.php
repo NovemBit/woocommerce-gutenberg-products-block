@@ -116,6 +116,10 @@ final class BlockTypesController {
 			'AllProducts',
 			'PriceFilter',
 			'AttributeFilter',
+			'StockFilter',
+			'ProductSorting',
+			'ColorAttributeFilter',
+			'CategoryFilter',
 			'ActiveFilters',
 		];
 
@@ -138,6 +142,10 @@ final class BlockTypesController {
 					'AllProducts',
 					'PriceFilter',
 					'AttributeFilter',
+					'StockFilter',
+					'ProductSorting',
+					'ColorAttributeFilter',
+					'CategoryFilter',
 					'ActiveFilters',
 					'Cart',
 					'Checkout',

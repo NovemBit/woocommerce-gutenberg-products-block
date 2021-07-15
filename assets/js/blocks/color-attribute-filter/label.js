@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { _n, sprintf } from '@wordpress/i18n';
-import Label from '@woocommerce/base-components/label';
+import { Label } from '@woocommerce/blocks-checkout';
 
 /**
  * The label for an attribute term filter.
@@ -30,7 +30,7 @@ const AttributeFilterLabel = ( { name, count } ) => {
 					) }
 					wrapperElement="span"
 					wrapperProps={ {
-						className: 'wc-block-attribute-filter-list-count',
+						className: 'wc-block-color-attribute-filter-list-count',
 					} }
 				/>
 			) }

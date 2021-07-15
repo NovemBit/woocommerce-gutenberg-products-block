@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { ProductListContainer } from '@woocommerce/base-components/product-list';
 import { InnerBlockLayoutContextProvider } from '@woocommerce/shared-context';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
-import { getSetting } from '@woocommerce/settings';
 
 /**
  * The All Products Block.
@@ -20,13 +19,11 @@ class Block extends Component {
 	};
 
 	render() {
-		const { attributes, urlParameterSuffix } = this.props;
+		const { attributes, isEditor, urlParameterSuffix } = this.props;
 
 		if ( attributes.isPreview ) {
 			return gridBlockPreview;
 		}
-
-		const hideOutOfStockItems = getSetting( 'hideOutOfStockItems', false );
 
 		/**
 		 * Todo classes
@@ -42,7 +39,11 @@ class Block extends Component {
 				<ProductListContainer
 					attributes={ attributes }
 					urlParameterSuffix={ urlParameterSuffix }
+<<<<<<< HEAD
+=======
 					hideOutOfStockItems={ hideOutOfStockItems }
+					isEditor={isEditor}
+>>>>>>> develop
 				/>
 			</InnerBlockLayoutContextProvider>
 		);

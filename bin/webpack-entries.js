@@ -38,6 +38,9 @@ const blocks = {
 	},
 	'price-filter': {},
 	'attribute-filter': {},
+	'stock-filter': {},
+	'product-sorting': {},
+	'category-filter': {},
 	'active-filters': {},
 	cart: {
 		customDir: 'cart-checkout/cart',
@@ -48,6 +51,7 @@ const blocks = {
 	'single-product': {
 		isExperimental: true,
 	},
+	'color-attribute-filter': {},
 };
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
