@@ -33,7 +33,10 @@ class AllProducts extends AbstractBlock {
 		$this->asset_data_registry->add( 'min_rows', wc_get_theme_support( 'product_blocks::min_rows', 1 ), true );
 		$this->asset_data_registry->add( 'max_rows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
 		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
+<<<<<<< HEAD
+=======
 		$this->asset_data_registry->add( 'hideOutOfStockItems', 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ), true );
 		$this->asset_data_registry->add( 'archiveTaxonomyId',  $term_id, true );
+>>>>>>> develop
 	}
 }

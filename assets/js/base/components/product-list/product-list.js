@@ -30,12 +30,7 @@ import './style.scss';
 import { getSetting } from '@woocommerce/settings';
 import { generateUrlParams } from './url-params';
 
-const generateQuery = ( {
-	sortValue,
-	currentPage,
-	attributes,
-	hideOutOfStockItems,
-} ) => {
+const generateQuery = ( { sortValue, currentPage, attributes } ) => {
 	const { columns, rows } = attributes;
 	const getSortArgs = ( orderName ) => {
 		switch ( orderName ) {
@@ -60,33 +55,13 @@ const generateQuery = ( {
 		}
 	};
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [ productStockStatus, setProductStockStatus ] = useQueryStateByKey(
-		'stock_status',
-		[]
-	);
-	// @todo Find way to exclude "outofstock" from existing product filters.
-	if ( hideOutOfStockItems ) {
-		let newStockStatus = [ 'instock', 'onbackorder' ];
-		if ( productStockStatus.length > 0 ) {
-			newStockStatus = productStockStatus;
-			if ( productStockStatus.includes( 'outofstock' ) ) {
-				newStockStatus = productStockStatus.filter(
-					( slug ) => slug !== 'outofstock'
-				);
-			}
-		}
-		setProductStockStatus( newStockStatus );
-	}
-
-	const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
+  const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
 
 	return {
 		...getSortArgs( sortValue ),
 		catalog_visibility: 'catalog',
 		per_page: columns * rows,
 		page: currentPage,
-		stock_status: productStockStatus,
 		category: archiveTaxonomyId,
 	};
 };
@@ -144,27 +119,12 @@ const ProductList = ( {
 	hideOutOfStockItems = false,
 	isEditor = false,
 } ) => {
-	const [ queryState ] = useSynchronizedQueryState(
-		generateQuery( {
-			attributes,
-			sortValue,
-			currentPage,
-			hideOutOfStockItems,
-		} )
-	);
-	const { products, totalProducts, productsLoading } = useStoreProducts(
-		queryState
-	);
-	const { parentClassName, parentName } = useInnerBlockLayoutContext();
-	const totalQuery = extractPaginationAndSortAttributes( queryState );
-	const { dispatchStoreEvent } = useStoreEvents();
-
-	const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
+	// These are possible filters.
+  const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
 		'product_cat',
 		[]
 	);
-
-	// These are possible filters.
+  
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
 		'attributes',
 		[]
@@ -176,7 +136,20 @@ const ProductList = ( {
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
 
-	if ( ! isEditor ) {
+	const [ queryState ] = useSynchronizedQueryState(
+		generateQuery( {
+			attributes,
+			sortValue,
+			currentPage,
+		} )
+	);
+	const { products, totalProducts, productsLoading } = useStoreProducts(
+		queryState
+	);
+	const { parentClassName, parentName } = useInnerBlockLayoutContext();
+	const totalQuery = extractPaginationAndSortAttributes( queryState );
+	const { dispatchStoreEvent } = useStoreEvents();
+  if ( ! isEditor ) {
 		generateUrlParams(
 			queryState,
 			productAttributes,
@@ -187,7 +160,6 @@ const ProductList = ( {
 			setMaxPrice
 		);
 	}
-
 	// Only update previous query totals if the query is different and the total number of products is a finite number.
 	const previousQueryTotals = usePrevious(
 		{ totalQuery, totalProducts },
@@ -303,7 +275,6 @@ const ProductList = ( {
 
 ProductList.propTypes = {
 	attributes: PropTypes.object.isRequired,
-	hideOutOfStockItems: PropTypes.bool,
 	// From withScrollToTop.
 	scrollToTop: PropTypes.func,
 };
