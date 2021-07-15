@@ -39,11 +39,7 @@ class Block extends Component {
 				<ProductListContainer
 					attributes={ attributes }
 					urlParameterSuffix={ urlParameterSuffix }
-<<<<<<< HEAD
-=======
-					hideOutOfStockItems={ hideOutOfStockItems }
-					isEditor={isEditor}
->>>>>>> develop
+					isEditor={ isEditor }
 				/>
 			</InnerBlockLayoutContextProvider>
 		);
