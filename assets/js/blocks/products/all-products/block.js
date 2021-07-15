@@ -19,7 +19,7 @@ class Block extends Component {
 	};
 
 	render() {
-		const { attributes, urlParameterSuffix } = this.props;
+		const { attributes, isEditor, urlParameterSuffix } = this.props;
 
 		if ( attributes.isPreview ) {
 			return gridBlockPreview;
@@ -39,6 +39,11 @@ class Block extends Component {
 				<ProductListContainer
 					attributes={ attributes }
 					urlParameterSuffix={ urlParameterSuffix }
+<<<<<<< HEAD
+=======
+					hideOutOfStockItems={ hideOutOfStockItems }
+					isEditor={isEditor}
+>>>>>>> develop
 				/>
 			</InnerBlockLayoutContextProvider>
 		);

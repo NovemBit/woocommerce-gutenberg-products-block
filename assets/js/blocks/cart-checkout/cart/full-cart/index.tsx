@@ -12,9 +12,10 @@ import {
 	Subtotal,
 	TotalsFees,
 	TotalsTaxes,
+	TotalsWrapper,
 	ExperimentalOrderMeta,
+	ExperimentalDiscountsMeta,
 } from '@woocommerce/blocks-checkout';
-
 import { getCurrencyFromPriceResponse } from '@woocommerce/price-format';
 import {
 	useStoreCartCoupons,
@@ -40,7 +41,6 @@ import CheckoutButton from '../checkout-button';
 import CartLineItemsTitle from './cart-line-items-title';
 import CartLineItemsTable from './cart-line-items-table';
 import { CartExpressPayment } from '../../payment-methods';
-
 import './style.scss';
 
 interface CartAttributes {
@@ -114,6 +114,11 @@ const Cart = ( { attributes }: CartProps ) => {
 		cart,
 	};
 
+	const discountsSlotFillProps = {
+		extensions,
+		cart,
+	};
+
 	return (
 		<>
 			<CartLineItemsTitle itemCount={ cartItemsCount } />
@@ -131,51 +136,65 @@ const Cart = ( { attributes }: CartProps ) => {
 					>
 						{ __( 'Cart totals', 'woo-gutenberg-products-block' ) }
 					</Title>
-					<Subtotal
-						currency={ totalsCurrency }
-						values={ cartTotals }
-					/>
-					<TotalsFees
-						currency={ totalsCurrency }
-						cartFees={ cartFees }
-					/>
-					<TotalsDiscount
-						cartCoupons={ appliedCoupons }
-						currency={ totalsCurrency }
-						isRemovingCoupon={ isRemovingCoupon }
-						removeCoupon={ removeCoupon }
-						values={ cartTotals }
-					/>
+					<TotalsWrapper>
+						<Subtotal
+							currency={ totalsCurrency }
+							values={ cartTotals }
+						/>
+						<TotalsFees
+							currency={ totalsCurrency }
+							cartFees={ cartFees }
+						/>
+						<TotalsDiscount
+							cartCoupons={ appliedCoupons }
+							currency={ totalsCurrency }
+							isRemovingCoupon={ isRemovingCoupon }
+							removeCoupon={ removeCoupon }
+							values={ cartTotals }
+						/>
+					</TotalsWrapper>
 					{ getSetting( 'couponsEnabled', true ) && (
-						<TotalsCoupon
-							onSubmit={ applyCoupon }
-							isLoading={ isApplyingCoupon }
-						/>
+						<TotalsWrapper>
+							<TotalsCoupon
+								onSubmit={ applyCoupon }
+								isLoading={ isApplyingCoupon }
+							/>
+						</TotalsWrapper>
 					) }
-					{ cartNeedsShipping && (
-						<TotalsShipping
-							showCalculator={ isShippingCalculatorEnabled }
-							showRateSelector={ true }
-							values={ cartTotals }
-							currency={ totalsCurrency }
-						/>
-					) }
-					{ ! getSetting(
-						'displayCartPricesIncludingTax',
-						false
-					) && (
-						<TotalsTaxes
-							showRateAfterTaxName={ showRateAfterTaxName }
-							currency={ totalsCurrency }
-							values={ cartTotals }
-						/>
-					) }
-
-					<TotalsFooterItem
-						currency={ totalsCurrency }
-						values={ cartTotals }
+					<ExperimentalDiscountsMeta.Slot
+						{ ...discountsSlotFillProps }
 					/>
+					{ cartNeedsShipping && (
+						<TotalsWrapper>
+							<TotalsShipping
+								showCalculator={ isShippingCalculatorEnabled }
+								showRateSelector={ true }
+								values={ cartTotals }
+								currency={ totalsCurrency }
+							/>
+						</TotalsWrapper>
+					) }
+					{ ! getSetting( 'displayCartPricesIncludingTax', false ) &&
+						parseInt( cartTotals.total_tax, 10 ) > 0 && (
+							<TotalsWrapper>
+								<TotalsTaxes
+									showRateAfterTaxName={
+										showRateAfterTaxName
+									}
+									currency={ totalsCurrency }
+									values={ cartTotals }
+								/>
+							</TotalsWrapper>
+						) }
+					<TotalsWrapper>
+						<TotalsFooterItem
+							currency={ totalsCurrency }
+							values={ cartTotals }
+						/>
+					</TotalsWrapper>
+
 					<ExperimentalOrderMeta.Slot { ...slotFillProps } />
+
 					<div className="wc-block-cart__payment-options">
 						{ cartNeedsPayment && <CartExpressPayment /> }
 						<CheckoutButton

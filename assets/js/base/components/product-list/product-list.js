@@ -13,6 +13,7 @@ import {
 	useStoreProducts,
 	useSynchronizedQueryState,
 	useQueryStateByKey,
+	useCollectionData,
 } from '@woocommerce/base-context/hooks';
 import withScrollToTop from '@woocommerce/base-hocs/with-scroll-to-top';
 import { useInnerBlockLayoutContext } from '@woocommerce/shared-context';
@@ -26,6 +27,8 @@ import NoMatchingProducts from './no-matching-products';
 import ProductSortSelect from './product-sort-select';
 import ProductListItem from './product-list-item';
 import './style.scss';
+import { getSetting } from '@woocommerce/settings';
+import { generateUrlParams } from './url-params';
 
 const generateQuery = ( { sortValue, currentPage, attributes } ) => {
 	const { columns, rows } = attributes;
@@ -52,11 +55,14 @@ const generateQuery = ( { sortValue, currentPage, attributes } ) => {
 		}
 	};
 
+  const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
+
 	return {
 		...getSortArgs( sortValue ),
 		catalog_visibility: 'catalog',
 		per_page: columns * rows,
 		page: currentPage,
+		category: archiveTaxonomyId,
 	};
 };
 
@@ -110,8 +116,15 @@ const ProductList = ( {
 	onSortChange,
 	sortValue,
 	scrollToTop,
+	hideOutOfStockItems = false,
+	isEditor = false,
 } ) => {
 	// These are possible filters.
+  const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
+		'product_cat',
+		[]
+	);
+  
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
 		'attributes',
 		[]
@@ -136,7 +149,17 @@ const ProductList = ( {
 	const { parentClassName, parentName } = useInnerBlockLayoutContext();
 	const totalQuery = extractPaginationAndSortAttributes( queryState );
 	const { dispatchStoreEvent } = useStoreEvents();
-
+  if ( ! isEditor ) {
+		generateUrlParams(
+			queryState,
+			productAttributes,
+			setArchiveTaxonomyId,
+			setProductStockStatus,
+			setProductAttributes,
+			setMinPrice,
+			setMaxPrice
+		);
+	}
 	// Only update previous query totals if the query is different and the total number of products is a finite number.
 	const previousQueryTotals = usePrevious(
 		{ totalQuery, totalProducts },
@@ -204,6 +227,7 @@ const ProductList = ( {
 	const hasFilters =
 		productAttributes.length > 0 ||
 		productStockStatus.length > 0 ||
+		productsTaxonomyIds.length > 0 ||
 		Number.isFinite( minPrice ) ||
 		Number.isFinite( maxPrice );
 
@@ -220,6 +244,7 @@ const ProductList = ( {
 					resetCallback={ () => {
 						setProductAttributes( [] );
 						setProductStockStatus( [] );
+						setArchiveTaxonomyId( [] );
 						setMinPrice( null );
 						setMaxPrice( null );
 					} }

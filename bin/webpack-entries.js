@@ -39,6 +39,8 @@ const blocks = {
 	'price-filter': {},
 	'attribute-filter': {},
 	'stock-filter': {},
+	'product-sorting': {},
+	'category-filter': {},
 	'active-filters': {},
 	cart: {
 		customDir: 'cart-checkout/cart',
@@ -49,6 +51,7 @@ const blocks = {
 	'single-product': {
 		isExperimental: true,
 	},
+	'color-attribute-filter': {},
 };
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
@@ -106,21 +109,21 @@ const entries = {
 		wcSettings: './assets/js/settings/shared/index.ts',
 		wcBlocksData: './assets/js/data/index.js',
 		wcBlocksMiddleware: './assets/js/middleware/index.js',
-		wcSharedContext: './assets/js/shared/context/index.js',
-		wcSharedHocs: './assets/js/shared/hocs/index.js',
+		wcBlocksSharedContext: './assets/js/shared/context/index.js',
+		wcBlocksSharedHocs: './assets/js/shared/hocs/index.js',
 		priceFormat: './packages/prices/index.js',
 		blocksCheckout: './packages/checkout/index.js',
 	},
 	main: {
 		// Shared blocks code
-		blocks: './assets/js/index.js',
+		'wc-blocks': './assets/js/index.js',
 
 		// Blocks
-		...getBlockEntries( 'index.js' ),
+		...getBlockEntries( 'index.{t,j}s{,x}' ),
 	},
 	frontend: {
 		reviews: './assets/js/blocks/reviews/frontend.js',
-		...getBlockEntries( 'frontend.js' ),
+		...getBlockEntries( 'frontend.{t,j}s{,x}' ),
 	},
 	payments: {
 		'wc-payment-method-stripe':

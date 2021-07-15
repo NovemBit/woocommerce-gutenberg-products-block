@@ -7,7 +7,7 @@ import { getSetting } from '@woocommerce/settings';
 import { useMemo } from '@wordpress/element';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { Label } from '@woocommerce/blocks-checkout';
+import Label from '@woocommerce/base-components/label';
 
 /**
  * Internal dependencies
@@ -36,6 +36,10 @@ const ActiveFiltersBlock = ( {
 		'stock_status',
 		[]
 	);
+	const [
+		productCategoryQuery,
+		setProductCategoryQuery,
+	] = useQueryStateByKey( 'product_cat', [] );
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
 
@@ -62,6 +66,31 @@ const ActiveFiltersBlock = ( {
 		STOCK_STATUS_OPTIONS,
 		productStockStatus,
 		setProductStockStatus,
+		blockAttributes.displayStyle,
+	] );
+	const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
+	const activeCategoryFilters = useMemo( () => {
+		if ( productCategoryQuery.length > 0 ) {
+			return productCategoryQuery.map( ( id ) => {
+				return renderRemovableListItem( {
+					type: __( 'Category', 'woo-gutenberg-products-block' ),
+					name: CATEGORY_OPTIONS[ id ].name,
+					removeCallback: () => {
+						const newOptions = productCategoryQuery.filter(
+							( cat ) => {
+								return cat !== id;
+							}
+						);
+						setProductCategoryQuery( newOptions );
+					},
+					displayStyle: blockAttributes.displayStyle,
+				} );
+			} );
+		}
+	}, [
+		CATEGORY_OPTIONS,
+		productCategoryQuery,
+		setProductCategoryQuery,
 		blockAttributes.displayStyle,
 	] );
 
@@ -107,6 +136,7 @@ const ActiveFiltersBlock = ( {
 		return (
 			productAttributes.length > 0 ||
 			productStockStatus.length > 0 ||
+			productCategoryQuery.length > 0 ||
 			Number.isFinite( minPrice ) ||
 			Number.isFinite( maxPrice )
 		);
@@ -158,6 +188,7 @@ const ActiveFiltersBlock = ( {
 						<>
 							{ activePriceFilters }
 							{ activeStockStatusFilters }
+							{ activeCategoryFilters }
 							{ activeAttributeFilters }
 						</>
 					) }
@@ -167,6 +198,7 @@ const ActiveFiltersBlock = ( {
 					onClick={ () => {
 						setMinPrice( undefined );
 						setMaxPrice( undefined );
+						setProductCategoryQuery( [] );
 						setProductAttributes( [] );
 						setProductStockStatus( [] );
 					} }

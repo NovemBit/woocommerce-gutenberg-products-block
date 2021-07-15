@@ -41,6 +41,9 @@ class ProductQuery {
 			$args['post_type'] = [ 'product', 'product_variation' ];
 		}
 
+		// Taxonomy query to filter products by type, category, tag, shipping class, and attribute.
+		$tax_query = [];
+
 		// Filter product type by slug.
 		if ( ! empty( $request['type'] ) ) {
 			if ( 'variation' === $request['type'] ) {
@@ -88,9 +91,6 @@ class ProductQuery {
 			}
 		}
 
-		// Taxonomy query to filter products by type, category, tag, shipping class, and attribute.
-		$tax_query = [];
-
 		$operator_mapping = [
 			'in'     => 'IN',
 			'not_in' => 'NOT IN',
@@ -114,6 +114,18 @@ class ProductQuery {
 					'operator' => $operator,
 				];
 			}
+		}
+
+		//Filter by product category
+		if( ! empty( $request['product_cat'] ) ){
+			$cat_query[] = [
+				'taxonomy' => 'product_cat',
+				'field'    => 'term_id',
+				'terms'    => $request['product_cat'],
+				'operator' => 'IN',
+			];
+
+			$tax_query = array_merge( $tax_query, $cat_query );
 		}
 
 		// Filter by attributes.
