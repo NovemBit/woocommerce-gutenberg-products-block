@@ -38,7 +38,7 @@ deploy:nebeauty:
   only:
     - develop
   script:
-    - dp 188.34.206.116 2322 develop
+    - dp 65.21.252.203 2322 develop
     - dp 188.34.206.116 23022 develop # with novembit-i18n
   dependencies:
     - build
