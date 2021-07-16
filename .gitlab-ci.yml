@@ -1,3 +1,4 @@
+# Last modified 16.07.2021 15:01 (GMT+4)
 image: registry.gitlab.com/xpac-group/sysadmin/docker/images/wordpress-ci
 
 stages:
