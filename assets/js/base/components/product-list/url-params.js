@@ -7,7 +7,8 @@ const params = [
 	'attributes',
 	'stock_status',
 	'min_price',
-	'max_price'
+	'max_price',
+	'search'
 ];
 
 let attributesParams = [];
@@ -29,13 +30,15 @@ const cleanURLSearchParams = (urlParams) => {
 
 /**
  * @param queryState
+ * @param productAttributes
  * @param setProductCat
  * @param setStockStatus
  * @param setAttributes
  * @param setMinPrice
  * @param setMaxPrice
+ * @param setSearch
  */
-export const generateUrlParams = (queryState, productAttributes, setProductCat, setStockStatus, setAttributes, setMinPrice, setMaxPrice) => {
+export const generateUrlParams = (queryState, productAttributes, setProductCat, setStockStatus, setAttributes, setMinPrice, setMaxPrice, setSearch) => {
 	useEffect(() => {
 		const url = new URL(encodeURI(window.location.href));
 		let searchParams = url.searchParams;
@@ -49,6 +52,8 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					setMinPrice(Number(value));
 				} else if (key === 'max_price') {
 					setMaxPrice(Number(value));
+				} else if ( key === 's' ){
+					setSearch( value )
 				}
 			}
 		});
@@ -69,7 +74,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		let query = [];
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
-				if (key !== 'category' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price') {
+				if (key !== 'category' && key !== 'stock_status' && key !== 'min_price' && key !== 'max_price' && key !== 's' && key !== 'post_type') {
 					let attributeObject = {};
 
 					let termsSlugs = value.split(',');
@@ -121,6 +126,8 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 				} else {
 					if (queryStateElement === 'product_cat') {
 						searchParams.set('category', queryState[queryStateElement])
+					}else if( queryStateElement === 'search' ){
+						searchParams.set('s', queryState[queryStateElement])
 					} else {
 						searchParams.set(queryStateElement, queryState[queryStateElement])
 					}

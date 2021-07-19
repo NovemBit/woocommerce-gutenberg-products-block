@@ -116,15 +116,19 @@ const ProductList = ( {
 	onSortChange,
 	sortValue,
 	scrollToTop,
-	hideOutOfStockItems = false,
 	isEditor = false,
 } ) => {
 	// These are possible filters.
-  const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
+  	const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
 		'product_cat',
 		[]
 	);
-  
+
+	const [ productSearchQuery, setProductSearchQuery ] = useQueryStateByKey(
+		'search',
+		[]
+	);
+
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
 		'attributes',
 		[]
@@ -157,7 +161,8 @@ const ProductList = ( {
 			setProductStockStatus,
 			setProductAttributes,
 			setMinPrice,
-			setMaxPrice
+			setMaxPrice,
+			setProductSearchQuery
 		);
 	}
 	// Only update previous query totals if the query is different and the total number of products is a finite number.
@@ -227,6 +232,7 @@ const ProductList = ( {
 	const hasFilters =
 		productAttributes.length > 0 ||
 		productStockStatus.length > 0 ||
+		productSearchQuery.length > 0 ||
 		productsTaxonomyIds.length > 0 ||
 		Number.isFinite( minPrice ) ||
 		Number.isFinite( maxPrice );
@@ -244,6 +250,7 @@ const ProductList = ( {
 					resetCallback={ () => {
 						setProductAttributes( [] );
 						setProductStockStatus( [] );
+						setProductSearchQuery( '' );
 						setArchiveTaxonomyId( [] );
 						setMinPrice( null );
 						setMaxPrice( null );
