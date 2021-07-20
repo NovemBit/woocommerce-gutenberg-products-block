@@ -24,12 +24,12 @@ import { previewOptions } from './preview';
 import './style.scss';
 
 const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
-const ARCHIVE_ID = getSetting( 'archiveTaxonomyId', [] );
+const ARCHIVE = getSetting( 'archiveTaxonomy', [] );
 
 let initialOptions = Object.entries(
 	CATEGORY_OPTIONS
 ).map( ( [ id, cat ] ) => ( { id, cat } ) );
-if ( ARCHIVE_ID ) {
+if ( ARCHIVE && ARCHIVE.taxonomy === 'product_cat' ) {
 	const getAllChildes = ( archiveId, foundedChildes ) => {
 		for ( const option of initialOptions ) {
 			if ( archiveId == option.cat.parent ) {
@@ -43,7 +43,7 @@ if ( ARCHIVE_ID ) {
 
 		return foundedChildes;
 	};
-	const archiveChildCats = getAllChildes( ARCHIVE_ID, [] );
+	const archiveChildCats = getAllChildes( ARCHIVE.term_id, [] );
 	initialOptions = initialOptions.filter( ( cat ) => {
 		if ( archiveChildCats.length > 0 ) {
 			for ( const archiveChildCat of archiveChildCats ) {
@@ -350,7 +350,7 @@ const CategoryFilterBlock = ( {
 						<CheckboxListHierarchical
 							className={ 'wc-block-category-filter-list' }
 							options={ displayedOptions }
-							topParent={ ARCHIVE_ID ? Number( ARCHIVE_ID ) : 0 }
+								topParent={ ARCHIVE.taxonomy === 'product_cat' ? Number( ARCHIVE.term_id ) : 0 }
 							checked={ checked }
 							onChange={ onChange }
 							isLoading={ isLoading }

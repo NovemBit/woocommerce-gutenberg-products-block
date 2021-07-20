@@ -55,14 +55,15 @@ const generateQuery = ( { sortValue, currentPage, attributes } ) => {
 		}
 	};
 
-  const archiveTaxonomyId = getSetting( 'archiveTaxonomyId', false );
+  const archiveTaxonomy = getSetting( 'archiveTaxonomy', false );
 
 	return {
 		...getSortArgs( sortValue ),
 		catalog_visibility: 'catalog',
 		per_page: columns * rows,
 		page: currentPage,
-		category: archiveTaxonomyId,
+		category: archiveTaxonomy.taxonomy === 'product_cat' ? archiveTaxonomy.term_id : '',
+		tag: archiveTaxonomy.taxonomy === 'product_tag' ? archiveTaxonomy.term_id : '',
 	};
 };
 
