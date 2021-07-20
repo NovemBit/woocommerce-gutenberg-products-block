@@ -49,7 +49,7 @@ registerBlockType( 'woocommerce/product-search-filter', {
 		 */
 		placeholder: {
 			type: 'string',
-			default: __( 'Search products…', 'woo-gutenberg-products-block' ),
+			default: __( 'Search products filter…', 'woo-gutenberg-products-block' ),
 			// source: 'attribute',
 			// selector: 'input.wc-block-product-search__field',
 			attribute: 'placeholder',
