@@ -53,7 +53,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 				} else if (key === 'max_price') {
 					setMaxPrice(Number(value));
 				} else if ( key === 's' ){
-					setSearch( value )
+					setSearch( decodeURIComponent( value ) )
 				}
 			}
 		});
