@@ -25,8 +25,10 @@ class AllProducts extends AbstractBlock {
 		$archive = [];
 		$query = get_queried_object();
 		if( isset( $query->term_id ) && isset( $query->taxonomy ) ){
-			$archive[ 'term_id' ] = $query->term_id;
-			$archive[ 'taxonomy' ] = $query->taxonomy;
+			if( $query->taxonomy === 'product_cat' || $query->taxonomy === 'product_tag' ){
+				$archive[ 'term_id' ] = $query->term_id;
+				$archive[ 'taxonomy' ] = $query->taxonomy;
+			}
 		}
 
 		$this->asset_data_registry->add( 'min_columns', wc_get_theme_support( 'product_blocks::min_columns', 1 ), true );
