@@ -14,6 +14,7 @@ const getProps = ( el ) => {
 		attributes: {
 			heading: el.dataset.heading,
 			headingLevel: el.dataset.headingLevel || 3,
+			placeholder: el.dataset.placeholder
 		},
 	};
 };

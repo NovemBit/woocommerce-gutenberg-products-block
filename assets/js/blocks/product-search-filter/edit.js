@@ -4,7 +4,6 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
-	Disabled,
 	PanelBody,
 	withSpokenMessages,
 } from '@wordpress/components';
@@ -62,9 +61,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 							setAttributes( { heading: value } )
 						}
 					/>
-					<Disabled>
-						<Block attributes={ attributes } isEditor={ true } />
-					</Disabled>
+					<Block attributes={ attributes } setAttributes={setAttributes} isEditor={ true } />
 				</div>
 			}
 		</>

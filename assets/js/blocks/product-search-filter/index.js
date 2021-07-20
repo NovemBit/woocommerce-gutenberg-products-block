@@ -45,6 +45,16 @@ registerBlockType( 'woocommerce/product-search-filter', {
 			default: 3,
 		},
 		/**
+		 * Search field placeholder.
+		 */
+		placeholder: {
+			type: 'string',
+			default: __( 'Search products…', 'woo-gutenberg-products-block' ),
+			// source: 'attribute',
+			// selector: 'input.wc-block-product-search__field',
+			attribute: 'placeholder',
+		},
+		/**
 		 * Are we previewing?
 		 */
 		isPreview: {
@@ -59,10 +69,12 @@ registerBlockType( 'woocommerce/product-search-filter', {
 			className,
 			heading,
 			headingLevel,
+			placeholder,
 		} = attributes;
 		const data = {
 			'data-heading': heading,
 			'data-heading-level': headingLevel,
+			'data-placeholder': placeholder,
 		};
 		return (
 			<div
