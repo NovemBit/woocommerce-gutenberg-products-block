@@ -43,6 +43,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 	useEffect(() => {
 		const url = new URL(encodeURI(window.location.href));
 		let searchParams = url.searchParams;
+		let to_delete_params = [];
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
 				if (key === 'category') {
@@ -52,6 +53,8 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					for (const cat_id of cats_to_check) {
 						if( CATEGORY_OPTIONS[ cat_id ] !== undefined ){
 							cats_to_set.push( cat_id )
+						}else{
+							to_delete_params.push( key )
 						}
 					}
 					setProductCat(cats_to_set);
@@ -62,6 +65,8 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					for (const status of status_to_check) {
 						if( STOCK_STATUS_OPTIONS[ status ] !== undefined ){
 							status_to_set.push( status )
+						}else{
+							to_delete_params.push( key )
 						}
 					}
 					setStockStatus(status_to_set);
@@ -73,6 +78,9 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					setSearch( decodeURIComponent( value ) )
 				}
 			}
+		});
+		to_delete_params.forEach(k => {
+			searchParams.delete(decodeURIComponent(k));
 		});
 	}, []);
 
