@@ -1,6 +1,7 @@
 import {useEffect} from '@wordpress/element';
 import {updateAttributeFilter} from '../../../utils/attributes-query';
 import {useCollection} from "@woocommerce/base-context/hooks";
+import {getSetting} from "@woocommerce/settings";
 
 const params = [
 	'product_cat',
@@ -45,9 +46,25 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
 				if (key === 'category') {
-					setProductCat(value.split(','));
+					const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
+					const cats_to_check = value.split(',').filter(Number);
+					let cats_to_set = [];
+					for (const cat_id of cats_to_check) {
+						if( CATEGORY_OPTIONS[ cat_id ] !== undefined ){
+							cats_to_set.push( cat_id )
+						}
+					}
+					setProductCat(cats_to_set);
 				} else if (key === 'stock_status') {
-					setStockStatus(value.split(','));
+					const STOCK_STATUS_OPTIONS = getSetting( 'stockStatusOptions', [] );
+					const status_to_check = value.split(',');
+					let status_to_set = [];
+					for (const status of status_to_check) {
+						if( STOCK_STATUS_OPTIONS[ status ] !== undefined ){
+							status_to_set.push( status )
+						}
+					}
+					setStockStatus(status_to_set);
 				} else if (key === 'min_price') {
 					setMinPrice(Number(value));
 				} else if (key === 'max_price') {
