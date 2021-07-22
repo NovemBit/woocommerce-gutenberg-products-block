@@ -66,17 +66,19 @@ const StockStatusFilterBlock = ( {
 
 	return (
 		<>
-			{ ! isEditor && blockAttributes.heading && (
-				<TagName>{ blockAttributes.heading }</TagName>
-			) }
-			<div className="wc-block-product-sorting">
-				{ hasProducts && (
-					<ProductSortSelect
-						onChange={ onSortChange }
-						value={ currentSort }
-					/>
-				) }
-			</div>
+			{ hasProducts && (
+				<>
+					{ ! isEditor && blockAttributes.heading && (
+						<TagName>{ blockAttributes.heading }</TagName>
+					) }
+					<div className="wc-block-product-sorting">
+							<ProductSortSelect
+								onChange={ onSortChange }
+								value={ currentSort }
+							/>
+					</div>
+				</>
+			)}
 		</>
 	);
 };

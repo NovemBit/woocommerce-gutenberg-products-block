@@ -3,7 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import {
-	useQueryStateByKey,
+	useQueryStateByContext,
+	useQueryStateByKey, useStoreProducts,
 } from '@woocommerce/base-context/hooks';
 import {
 	Disabled
@@ -36,6 +37,9 @@ const ProductSearchFilterBlock = ( {
 		setProductSearchQuery,
 	] = useQueryStateByKey( 'search', '' );
 
+	const [ queryState ] = useQueryStateByContext();
+	const { products, productsLoading } = useStoreProducts( queryState );
+
 	const onChange = useCallback(
 		( e ) => {
 			setSearch( e.target.value )
@@ -64,6 +68,7 @@ const ProductSearchFilterBlock = ( {
 	}, [ productSearchQuery ] );
 
 	const TagName = `h${ blockAttributes.headingLevel }`;
+	const hasProducts = products.length !== 0 || productSearchQuery.length !== 0;
 
 	const markup = 	<button
 		type="button"
@@ -87,30 +92,34 @@ const ProductSearchFilterBlock = ( {
 
 	return (
 		<>
-			{ ! isEditor && blockAttributes.heading && (
-				<TagName>{ blockAttributes.heading }</TagName>
-			) }
-			<div className="wp-block-woocommerce-product-search-filter">
-				{ isEditor && <TextControl
-					className="wc-block-product-search-filter__field input-control"
-					value={ blockAttributes.placeholder }
-					onChange={ ( value ) =>
-						setAttributes( { placeholder: value } )
-					}
-				/>}
-				{!isEditor && <input
-					type="text"
-					className="wc-block-product-search-filter__field"
-					placeholder={ blockAttributes.placeholder }
-					onChange={ e => onChange( e ) }
-					onKeyPress={ e => handleEnter(e) }
-				/>}
-				{ isEditor && <Disabled>
-					{markup}
-				</Disabled>}
-				{!isEditor && markup}
+			{ hasProducts && (
+				<>
+					{ ! isEditor && blockAttributes.heading && (
+						<TagName>{ blockAttributes.heading }</TagName>
+					) }
+					<div className="wp-block-woocommerce-product-search-filter">
+						{ isEditor && <TextControl
+							className="wc-block-product-search-filter__field input-control"
+							value={ blockAttributes.placeholder }
+							onChange={ ( value ) =>
+								setAttributes( { placeholder: value } )
+							}
+						/>}
+						{!isEditor && <input
+							type="text"
+							className="wc-block-product-search-filter__field"
+							placeholder={ blockAttributes.placeholder }
+							onChange={ e => onChange( e ) }
+							onKeyPress={ e => handleEnter(e) }
+						/>}
+						{ isEditor && <Disabled>
+							{markup}
+						</Disabled>}
+						{!isEditor && markup}
 
-			</div>
+					</div>
+				</>
+			)}
 		</>
 	);
 };
