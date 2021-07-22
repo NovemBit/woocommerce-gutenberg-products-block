@@ -36,10 +36,10 @@ const ActiveFiltersBlock = ( {
 		'stock_status',
 		''
 	);
-	const [
-		productSearchQuery,
-		setProductSearchQuery,
-	] = useQueryStateByKey( 'search', [] );
+	const [ productSearchQuery, setProductSearchQuery ] = useQueryStateByKey(
+		'search',
+		[]
+	);
 
 	const [
 		productCategoryQuery,
@@ -49,21 +49,21 @@ const ActiveFiltersBlock = ( {
 	const [ minPrice, setMinPrice ] = useQueryStateByKey( 'min_price' );
 	const [ maxPrice, setMaxPrice ] = useQueryStateByKey( 'max_price' );
 
-	const activeSearchFilters = useMemo ( () => {
-		if( productSearchQuery.length > 0 ){
+	const activeSearchFilters = useMemo( () => {
+		if ( productSearchQuery.length > 0 ) {
 			return renderRemovableListItem( {
 				type: __( 'Search', 'woo-gutenberg-products-block' ),
-				name: sprintf(  __( 'Search: %s', 'woo-gutenberg-products-block' ), productSearchQuery ),
+				name: sprintf(
+					__( 'Search: "%s"', 'woo-gutenberg-products-block' ),
+					productSearchQuery
+				),
 				removeCallback: () => {
 					setProductSearchQuery( '' );
 				},
 				displayStyle: blockAttributes.displayStyle,
 			} );
 		}
-	}, [
-		productSearchQuery,
-		setProductSearchQuery,
-	]);
+	}, [ productSearchQuery, setProductSearchQuery ] );
 
 	const STOCK_STATUS_OPTIONS = getSetting( 'stockStatusOptions', [] );
 	const activeStockStatusFilters = useMemo( () => {
