@@ -68,7 +68,7 @@ const ProductSearchFilterBlock = ( {
 	}, [ productSearchQuery ] );
 
 	const TagName = `h${ blockAttributes.headingLevel }`;
-	const hasProducts = products.length !== 0 || productSearchQuery.length !== 0;
+	const hasProducts = products.length !== 0 || productSearchQuery.length !== 0 || productsLoading;
 
 	const markup = 	<button
 		type="button"
