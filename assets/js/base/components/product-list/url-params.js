@@ -43,20 +43,18 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 	useEffect(() => {
 		const url = new URL(encodeURI(window.location.href));
 		let searchParams = url.searchParams;
-		let to_delete_params = [];
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
 				if (key === 'category') {
 					const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
-					const cats_to_check = value.split(',').filter(Number);
+					const cats_to_check = value.split(',');
 					let cats_to_set = [];
 					for (const cat_id of cats_to_check) {
 						if( CATEGORY_OPTIONS[ cat_id ] !== undefined ){
 							cats_to_set.push( cat_id )
-						}else{
-							to_delete_params.push( key )
 						}
 					}
+					searchParams.set('category', cats_to_set)
 					setProductCat(cats_to_set);
 				} else if (key === 'stock_status') {
 					const STOCK_STATUS_OPTIONS = getSetting( 'stockStatusOptions', [] );
@@ -65,10 +63,9 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					for (const status of status_to_check) {
 						if( STOCK_STATUS_OPTIONS[ status ] !== undefined ){
 							status_to_set.push( status )
-						}else{
-							to_delete_params.push( key )
 						}
 					}
+					searchParams.set('stock_status', status_to_set)
 					setStockStatus(status_to_set);
 				} else if (key === 'min_price') {
 					setMinPrice(Number(value));
@@ -79,9 +76,11 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 				}
 			}
 		});
-		to_delete_params.forEach(k => {
-			searchParams.delete(decodeURIComponent(k));
-		});
+		url.search = searchParams.toString();
+		const new_url = decodeURI(url.toString());
+		if (new_url !== window.location.href) {
+			window.history.pushState("", "", new_url.replaceAll('%2C', ','));
+		}
 	}, []);
 
 	const {results, isLoading} = useCollection({
