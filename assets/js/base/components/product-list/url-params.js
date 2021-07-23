@@ -46,23 +46,23 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 		searchParams.forEach((value, key) => {
 			if (value !== null && !key.includes('_qt')) {
 				if (key === 'category') {
-					const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
+					const CATEGORY_OPTIONS = getSetting('categoryOptions', []);
 					const cats_to_check = value.split(',');
 					let cats_to_set = [];
 					for (const cat_id of cats_to_check) {
-						if( CATEGORY_OPTIONS[ cat_id ] !== undefined ){
-							cats_to_set.push( cat_id )
+						if (CATEGORY_OPTIONS[cat_id] !== undefined) {
+							cats_to_set.push(cat_id)
 						}
 					}
 					searchParams.set('category', cats_to_set)
 					setProductCat(cats_to_set);
 				} else if (key === 'stock_status') {
-					const STOCK_STATUS_OPTIONS = getSetting( 'stockStatusOptions', [] );
+					const STOCK_STATUS_OPTIONS = getSetting('stockStatusOptions', []);
 					const status_to_check = value.split(',');
 					let status_to_set = [];
 					for (const status of status_to_check) {
-						if( STOCK_STATUS_OPTIONS[ status ] !== undefined ){
-							status_to_set.push( status )
+						if (STOCK_STATUS_OPTIONS[status] !== undefined) {
+							status_to_set.push(status)
 						}
 					}
 					searchParams.set('stock_status', status_to_set)
@@ -71,8 +71,8 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 					setMinPrice(Number(value));
 				} else if (key === 'max_price') {
 					setMaxPrice(Number(value));
-				} else if ( key === 's' ){
-					setSearch( decodeURIComponent( value ) )
+				} else if (key === 's') {
+					setSearch(decodeURIComponent(value))
 				}
 			}
 		});
@@ -150,7 +150,7 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 				} else {
 					if (queryStateElement === 'product_cat') {
 						searchParams.set('category', queryState[queryStateElement])
-					}else if( queryStateElement === 'search' ){
+					} else if (queryStateElement === 'search') {
 						searchParams.set('s', queryState[queryStateElement])
 					} else {
 						searchParams.set(queryStateElement, queryState[queryStateElement])
