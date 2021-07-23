@@ -54,7 +54,11 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 							cats_to_set.push(cat_id)
 						}
 					}
-					searchParams.set('category', cats_to_set)
+					if( cats_to_set.length > 0 ){
+						searchParams.set('category', cats_to_set)
+					}else{
+						searchParams.delete('category')
+					}
 					setProductCat(cats_to_set);
 				} else if (key === 'stock_status') {
 					const STOCK_STATUS_OPTIONS = getSetting('stockStatusOptions', []);
@@ -65,7 +69,11 @@ export const generateUrlParams = (queryState, productAttributes, setProductCat, 
 							status_to_set.push(status)
 						}
 					}
-					searchParams.set('stock_status', status_to_set)
+					if( status_to_set.length > 0 ){
+						searchParams.set('stock_status', status_to_set)
+					}else{
+						searchParams.delete('stock_status')
+					}
 					setStockStatus(status_to_set);
 				} else if (key === 'min_price') {
 					setMinPrice(Number(value));
