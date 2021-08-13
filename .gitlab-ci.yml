@@ -25,7 +25,7 @@ build:
     reports:
       dotenv: build.env
 
-deploy:
+xpac:dev:
   stage: deploy
   only:
     - develop
@@ -34,17 +34,25 @@ deploy:
   dependencies:
     - build
 
-deploy:nebeauty:
+nebeauty:prod:
+  stage: deploy
+  only:
+    - master
+  script:
+    - dp 65.21.252.203 7022 develop
+  dependencies:
+    - build
+
+nebeauty:dev:
   stage: deploy
   only:
     - develop
   script:
     - dp 65.21.252.203 2322 develop
-    - dp 188.34.206.116 23022 develop # with novembit-i18n
   dependencies:
     - build
 
-deploy:noorb:
+noorb:dev:
   stage: deploy
   only:
     - develop
@@ -53,7 +61,7 @@ deploy:noorb:
   dependencies:
     - build
 
-deploy:novembit:
+novembit:dev:
   stage: deploy
   only:
     - develop
@@ -62,17 +70,56 @@ deploy:novembit:
   dependencies:
     - build
 
-deploy:dev-groups:
+backend:
   stage: deploy
   only:
     - develop
   script:
     - dp 188.34.206.116 2422 develop # backend
-    - dp 188.34.206.116 2522 develop # frontend
-    - dp 188.34.206.116 2622 develop # erik
-    - dp 188.34.206.116 2722 develop # aaron
-    - dp 188.34.206.116 3022 develop # i18n
-    - dp 188.34.206.116 21022 develop # ani
   dependencies:
     - build
 
+frontend:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 2522 develop # frontend
+  dependencies:
+    - build
+
+etadevosyan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 2622 develop # erik
+  dependencies:
+    - build
+
+ayordanyan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 2722 develop # aaron
+  dependencies:
+    - build
+
+i18n:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 3022 develop # i18n
+  dependencies:
+    - build
+
+aalayan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - dp 188.34.206.116 21022 develop # ani
+  dependencies:
+    - build
