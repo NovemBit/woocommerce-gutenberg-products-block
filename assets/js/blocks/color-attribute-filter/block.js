@@ -354,7 +354,6 @@ const AttributeFilterBlock = ( {
 									role={ 'button' }
 									tabIndex={ index }
 									title={option.label.props.name}
-									onKeyDown={ () => onChange( option.value ) }
 									onClick={ () => onChange( option.value ) }
 								/>
 						</li>
