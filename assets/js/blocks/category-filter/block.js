@@ -123,7 +123,7 @@ const CategoryFilterBlock = ( {
 			return;
 		}
 
-		const newOptions = initialOptions
+		let newOptions = initialOptions
 			.map( ( category ) => {
 				let filteredCategory = getFilteredCategory(
 					Number( category.id )
@@ -142,6 +142,7 @@ const CategoryFilterBlock = ( {
 
 				return {
 					value: category.id,
+					open: false,
 					name: decodeEntities( category.cat.name ),
 					parent: category.cat.parent,
 					label: (
@@ -154,6 +155,25 @@ const CategoryFilterBlock = ( {
 			} )
 			.filter( Boolean );
 
+		newOptions = newOptions.map(
+			(option) => {
+				if( checked.includes( option.value ) ){
+					option.open = true;
+					let parents = getParents( option.value, [] )
+					if( parents.length > 0 ){
+						for (const parent of parents) {
+							for (const item of newOptions) {
+								if( item.value == parent ){
+									item.open = true;
+								}
+							}
+						}
+					}
+				}
+				return option;
+			}
+		);
+
 		setDisplayedOptions( newOptions );
 	}, [
 		blockAttributes.showCounts,
@@ -164,21 +184,22 @@ const CategoryFilterBlock = ( {
 		queryState.category,
 	] );
 
-	const getParents = ( checked, foundedChildes ) => {
+	const getParents = ( checked, foundedParents ) => {
 		for ( const option of initialOptions ) {
 			if ( checked == option.id ) {
 				if ( ! option.cat.parent ) {
 					continue;
 				}
-				foundedChildes.push( option.cat.parent );
-				foundedChildes = getParents(
+
+				foundedParents.push( option.cat.parent );
+				foundedParents = getParents(
 					option.cat.parent,
-					foundedChildes
+					foundedParents
 				);
 			}
 		}
 
-		return foundedChildes;
+		return foundedParents;
 	};
 
 	const getChildes = ( checked, foundedChildes ) => {

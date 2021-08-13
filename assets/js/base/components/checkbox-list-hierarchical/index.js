@@ -33,7 +33,6 @@ const CheckboxListHierarchical = ( {
 	isDisabled = false,
 	limit = 10,
 } ) => {
-	const [ showExpanded, setShowExpanded ] = useState( false );
 
 	const placeholder = useMemo( () => {
 		return [ ...Array( 5 ) ].map( ( x, i ) => (
@@ -47,80 +46,14 @@ const CheckboxListHierarchical = ( {
 		) );
 	}, [] );
 
-	const renderedShowMore = useMemo( () => {
-		const optionCount = options.length;
-		const remainingOptionsCount = optionCount - limit;
-		return (
-			! showExpanded && (
-				<li key="show-more" className="show-more">
-					<button
-						onClick={ () => {
-							setShowExpanded( true );
-						} }
-						aria-expanded={ false }
-						aria-label={ sprintf(
-							/* translators: %s is referring the remaining count of options */
-							_n(
-								'Show %s more option',
-								'Show %s more options',
-								remainingOptionsCount,
-								'woo-gutenberg-products-block'
-							),
-							remainingOptionsCount
-						) }
-					>
-						{ sprintf(
-							/* translators: %s number of options to reveal. */
-							_n(
-								'Show %s more',
-								'Show %s more',
-								remainingOptionsCount,
-								'woo-gutenberg-products-block'
-							),
-							remainingOptionsCount
-						) }
-					</button>
-				</li>
-			)
-		);
-	}, [ options, limit, showExpanded ] );
-
-	const renderedShowLess = useMemo( () => {
-		return (
-			showExpanded && (
-				<li key="show-less" className="show-less">
-					<button
-						onClick={ () => {
-							setShowExpanded( false );
-						} }
-						aria-expanded={ true }
-						aria-label={ __(
-							'Show less options',
-							'woo-gutenberg-products-block'
-						) }
-					>
-						{ __( 'Show less', 'woo-gutenberg-products-block' ) }
-					</button>
-				</li>
-			)
-		);
-	}, [ showExpanded ] );
-
-	const tmp = (currentOptions, depth = 0) => {
-		// Truncate options if > the limit + 5.
-		const optionCount = currentOptions.length;
-		const shouldTruncateOptions = optionCount > limit + 5;
+	const childList = (currentOptions, depth = 0) => {
 
 		return (
 			<>
 				{ currentOptions.map( ( option, index ) => {
 					const children = options.filter(o => Number(o.parent) === Number(option.value));
 					return <Fragment key={ option.value }>
-						<li	className='wc-block-checkbox-list__li'
-							{ ...( shouldTruncateOptions &&
-								! showExpanded &&
-								index >= limit && { hidden: true } ) }
-						>
+						<li	className='wc-block-checkbox-list__li'>
 							<div className='wc-block-checkbox-list__item'>
 								<input
 										className='wc-block-checkbox-list__checkbox'
@@ -138,31 +71,22 @@ const CheckboxListHierarchical = ( {
 									{ option.label }
 								</label>
 							</div>
-							{
-								(children.length > 0) && <ul className='wc-block-checkbox-list__sublist'>{tmp(children, ++depth)}</ul>
-							}
+							{children.length > 0 && option.open && <ul className='wc-block-checkbox-list__sublist'>{childList(children, ++depth)}</ul>}
 						</li>
-						{ shouldTruncateOptions &&
-						index === limit - 1 &&
-						renderedShowMore }
 					</Fragment>
 				} ) }
-				{ shouldTruncateOptions && renderedShowLess }
 			</>
 		);
 	}
 
 	const renderedOptions = useMemo(
-		() => tmp(options.filter(o => Number(o.parent) === topParent)),
+		() => childList(options.filter(o => Number(o.parent) === topParent)),
 		[
 			options,
 			topParent,
 			onChange,
 			checked,
-			showExpanded,
 			limit,
-			renderedShowLess,
-			renderedShowMore,
 			isDisabled,
 		]
 	);
