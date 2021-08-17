@@ -33,12 +33,6 @@
 	],
 	"build": [
 	  "npm i && npm run build"
-	],
-	"post-install-cmd": [
-	  "npm i && npm run build"
-	],
-	"post-update-cmd": [
-	  "npm i && npm run build"
 	]
   },
   "extra": {
