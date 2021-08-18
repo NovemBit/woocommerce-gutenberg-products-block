@@ -33,6 +33,12 @@
 	],
 	"build": [
 	  "run(){ npm i && npm run build; }; run"
+	],
+	"post-install-cmd": [
+	  "composer run-script build"
+	],
+	"post-update-cmd": [
+	  "composer run-script build"
 	]
   },
   "extra": {
