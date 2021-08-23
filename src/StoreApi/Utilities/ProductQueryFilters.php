@@ -99,32 +99,6 @@ class ProductQueryFilters
 	}
 
 	/**
-	 * Generate calculate query by stock status.
-	 *
-	 * @param  string  $status  status to calculate.
-	 * @param  string  $product_query_sql  product query for current filter state.
-	 * @param  array  $stock_status_options  available stock status options.
-	 *
-	 * @return false|string
-	 */
-	private function generate_stock_status_count_query($status, $product_query_sql, $stock_status_options)
-	{
-		if ( ! in_array($status, $stock_status_options, true)) {
-			return false;
-		}
-		global $wpdb;
-
-		return "
-			SELECT COUNT( DISTINCT posts.ID ) as status_count
-			FROM {$wpdb->posts} as posts
-			INNER JOIN {$wpdb->postmeta} as postmeta ON posts.ID = postmeta.post_id
-            AND postmeta.meta_key = '_stock_status'
-            AND postmeta.meta_value = '{$status}'
-			WHERE posts.ID IN ( {$product_query_sql} )
-		";
-	}
-
-	/**
 	 * Get category counts for the current products.
 	 *
 	 * @param  \WP_REST_Request  $request  The request object.
@@ -217,6 +191,31 @@ class ProductQueryFilters
 		}
 
 		return $founded_childes;
+	}
+
+	/**
+	 * Generate calculate query by stock status.
+	 *
+	 * @param string $status status to calculate.
+	 * @param string $product_query_sql product query for current filter state.
+	 * @param array  $stock_status_options available stock status options.
+	 *
+	 * @return false|string
+	 */
+	private function generate_stock_status_count_query( $status, $product_query_sql, $stock_status_options ) {
+		if ( ! in_array( $status, $stock_status_options, true ) ) {
+			return false;
+		}
+		global $wpdb;
+		$status = esc_sql( $status );
+		return "
+			SELECT COUNT( DISTINCT posts.ID ) as status_count
+			FROM {$wpdb->posts} as posts
+			INNER JOIN {$wpdb->postmeta} as postmeta ON posts.ID = postmeta.post_id
+            AND postmeta.meta_key = '_stock_status'
+            AND postmeta.meta_value = '{$status}'
+			WHERE posts.ID IN ( {$product_query_sql} )
+		";
 	}
 
 	/**
