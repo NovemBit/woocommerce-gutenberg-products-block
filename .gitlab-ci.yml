@@ -1,3 +1,4 @@
+# Last modified 16.07.2021 15:01 (GMT+4)
 image: registry.gitlab.com/xpac-group/sysadmin/docker/images/wordpress-ci
 
 stages:
@@ -11,67 +12,112 @@ before_script:
   - echo $SSH_PUBLIC_KEY | base64 -d >~/.ssh/id_rsa.pub
   - echo $SSH_KNOWN_HOSTS | base64 -d >~/.ssh/known_hosts && chmod 0644 ~/.ssh/known_hosts
   - composer global config gitlab-token.gitlab.com $GITLAB_READ_ACCESS_TOKEN
-  - function dp { ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $2 root@$1 "cd /var/www/html; wp plugin install 'https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$BUILD_JOB_ID/artifacts/$CI_PROJECT_NAME.zip?private_token=$GITLAB_READ_ACCESS_TOKEN' --force"; }
 
 build:
   stage: build
   script:
-    - wp-build $CI_PROJECT_NAME
-    - echo "BUILD_JOB_ID=$CI_JOB_ID" >> build.env
+    - wp-build
   artifacts:
     paths:
       - ./
     reports:
       dotenv: build.env
 
-deploy:
+xpac:dev:
   stage: deploy
   only:
     - develop
   script:
-    - dp 188.34.206.116 2099 develop
+    - wp-deploy plugin 188.34.206.116 2022
   dependencies:
     - build
 
-deploy:nebeauty:
+nebeauty:prod:
+  stage: deploy
+  only:
+    - master
+  script:
+    - wp-deploy plugin 65.21.252.203 7022
+  dependencies:
+    - build
+
+nebeauty:dev:
   stage: deploy
   only:
     - develop
   script:
-    - dp 188.34.206.116 2322 develop
-    - dp 188.34.206.116 23022 develop # with novembit-i18n
+    - wp-deploy plugin 65.21.252.203 2322
   dependencies:
     - build
 
-deploy:noorb:
+noorb:dev:
   stage: deploy
   only:
     - develop
   script:
-    - dp 188.34.206.116 23122 develop
+    - wp-deploy plugin 188.34.206.116 23122
   dependencies:
     - build
 
-deploy:novembit:
+novembit:dev:
   stage: deploy
   only:
     - develop
   script:
-    - dp 188.34.206.116 2822 develop
+    - wp-deploy plugin 188.34.206.116 2822
   dependencies:
     - build
 
-deploy:dev-groups:
+backend:
   stage: deploy
   only:
     - develop
   script:
-    - dp 188.34.206.116 2422 develop # backend
-    - dp 188.34.206.116 2522 develop # frontend
-    - dp 188.34.206.116 2622 develop # erik
-    - dp 188.34.206.116 2722 develop # aaron
-    - dp 188.34.206.116 3022 develop # i18n
-    - dp 188.34.206.116 21022 develop # ani
+    - wp-deploy plugin 188.34.206.116 2422 # backend
   dependencies:
     - build
 
+frontend:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 2522 # frontend
+  dependencies:
+    - build
+
+etadevosyan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 2622 # erik
+  dependencies:
+    - build
+
+ayordanyan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 2722 # aaron
+  dependencies:
+    - build
+
+i18n:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 3022 # i18n
+  dependencies:
+    - build
+
+aalayan:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 21022 # ani
+  dependencies:
+    - build

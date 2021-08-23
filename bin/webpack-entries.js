@@ -39,6 +39,7 @@ const blocks = {
 	'price-filter': {},
 	'attribute-filter': {},
 	'stock-filter': {},
+	'product-search-filter': {},
 	'product-sorting': {},
 	'category-filter': {},
 	'active-filters': {},

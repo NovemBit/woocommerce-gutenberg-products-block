@@ -5,7 +5,7 @@ import {
 	useStoreProducts,
 	useSynchronizedQueryState,
 } from '@woocommerce/base-context/hooks';
-import { useEffect, useState } from '@wordpress/element';
+import {useEffect, useState} from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -22,12 +22,12 @@ import './style.scss';
  * @param {Object} props.attributes Incoming block attributes.
  * @param {boolean} props.isEditor
  */
-const StockStatusFilterBlock = ( {
-	attributes: blockAttributes,
-	isEditor = false,
-} ) => {
-	const getSortArgs = ( orderName ) => {
-		switch ( orderName ) {
+const StockStatusFilterBlock = ({
+									attributes: blockAttributes,
+									isEditor = false,
+								}) => {
+	const getSortArgs = (orderName) => {
+		switch (orderName) {
 			case 'menu_order':
 			case 'popularity':
 			case 'rating':
@@ -49,34 +49,46 @@ const StockStatusFilterBlock = ( {
 		}
 	};
 
-	const [ currentSort, setSort ] = useState();
-	const [ queryState ] = useSynchronizedQueryState( {
-		...getSortArgs( currentSort ),
-	} );
+	const [currentSort, setSort] = useState();
+	const [defaultSort, setDefaultSort] = useState();
+	const [queryState] = useSynchronizedQueryState({
+		...getSortArgs(currentSort),
+	});
 
-	const { products, productsLoading } = useStoreProducts( queryState );
+	useEffect(() => {
+		if (queryState.orderby !== "undefined") {
+			setDefaultSort(queryState.orderby);
+		}
+	}, [queryState])
 
-	const onSortChange = ( event ) => {
+	const {products, productsLoading} = useStoreProducts(queryState);
+
+	const onSortChange = (event) => {
 		const newSortValue = event.target.value;
-		setSort( newSortValue );
+		setSort(newSortValue);
 	};
 
-	const TagName = `h${ blockAttributes.headingLevel }`;
+	const TagName = `h${blockAttributes.headingLevel}`;
 	const hasProducts = products.length !== 0 || productsLoading;
 
 	return (
 		<>
-			{ ! isEditor && blockAttributes.heading && (
-				<TagName>{ blockAttributes.heading }</TagName>
-			) }
-			<div className="wc-block-product-sorting">
-				{ hasProducts && (
-					<ProductSortSelect
-						onChange={ onSortChange }
-						value={ currentSort }
-					/>
-				) }
-			</div>
+			{hasProducts && (
+				<>
+					{!isEditor && blockAttributes.heading && (
+						<TagName>{blockAttributes.heading}</TagName>
+					)}
+					{defaultSort &&
+						<div className="wc-block-product-sorting">
+							<ProductSortSelect
+								defaultValue={defaultSort}
+								onChange={onSortChange}
+								value={currentSort}
+							/>
+						</div>
+					}
+				</>
+			)}
 		</>
 	);
 };

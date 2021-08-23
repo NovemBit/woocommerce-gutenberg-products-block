@@ -22,9 +22,13 @@ class AllProducts extends AbstractBlock {
 	protected function enqueue_data( array $attributes = [] ) {
 		parent::enqueue_data( $attributes );
 		//if archive page set term id to filter product list
-		$term_id = "";
-		if( isset( get_queried_object()->term_id ) ){
-			$term_id = get_queried_object()->term_id;
+		$archive = [];
+		$query = get_queried_object();
+		if( isset( $query->term_id ) && isset( $query->taxonomy ) ){
+			if( $query->taxonomy === 'product_cat' || $query->taxonomy === 'product_tag' ){
+				$archive[ 'term_id' ] = $query->term_id;
+				$archive[ 'taxonomy' ] = $query->taxonomy;
+			}
 		}
 
 		$this->asset_data_registry->add( 'min_columns', wc_get_theme_support( 'product_blocks::min_columns', 1 ), true );
@@ -34,6 +38,6 @@ class AllProducts extends AbstractBlock {
 		$this->asset_data_registry->add( 'max_rows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
 		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
 		$this->asset_data_registry->add( 'hideOutOfStockItems', 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ), true );
-		$this->asset_data_registry->add( 'archiveTaxonomyId',  $term_id, true );
+		$this->asset_data_registry->add( 'archiveTaxonomyId',  $archive, true );
 	}
 }
