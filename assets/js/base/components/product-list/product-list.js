@@ -116,15 +116,12 @@ const ProductList = ( {
 	onSortChange,
 	sortValue,
 	scrollToTop,
-	hideOutOfStockItems = false,
-	isEditor = false,
 } ) => {
 	// These are possible filters.
   const [ productsTaxonomyIds, setArchiveTaxonomyId ] = useQueryStateByKey(
 		'product_cat',
 		[]
 	);
-  
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
 		'attributes',
 		[]

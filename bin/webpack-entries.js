@@ -48,6 +48,10 @@ const blocks = {
 	checkout: {
 		customDir: 'cart-checkout/checkout',
 	},
+	'checkout-i2': {
+		customDir: 'cart-checkout/checkout-i2',
+		isExperimental: true,
+	},
 	'single-product': {
 		isExperimental: true,
 	},
@@ -91,6 +95,8 @@ const entries = {
 			'./node_modules/wordpress-components/src/spinner/style.scss',
 		'snackbar-notice-style':
 			'./node_modules/wordpress-components/src/snackbar/style.scss',
+		'combobox-control-style':
+			'./node_modules/wordpress-components/src/combobox-control/style.scss',
 
 		'general-style': glob.sync( './assets/**/*.scss', {
 			ignore: [
@@ -107,7 +113,7 @@ const entries = {
 	core: {
 		wcBlocksRegistry: './assets/js/blocks-registry/index.js',
 		wcSettings: './assets/js/settings/shared/index.ts',
-		wcBlocksData: './assets/js/data/index.js',
+		wcBlocksData: './assets/js/data/index.ts',
 		wcBlocksMiddleware: './assets/js/middleware/index.js',
 		wcBlocksSharedContext: './assets/js/shared/context/index.js',
 		wcBlocksSharedHocs: './assets/js/shared/hocs/index.js',
