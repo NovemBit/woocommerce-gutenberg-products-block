@@ -132,12 +132,13 @@ final class BlockTypesController {
 		if ( Package::feature()->is_experimental_build() ) {
 			$block_types[] = 'SingleProduct';
 			$block_types[] = 'CheckoutI2';
+			$block_types[] = 'MiniCart';
 		}
 
 		/**
 		 * This disables specific blocks in Widget Areas by not registering them.
 		 */
-		if ( in_array( $pagenow, [ 'themes.php', 'customize.php' ], true ) ) {
+		if ( in_array( $pagenow, [ 'widgets.php', 'themes.php', 'customize.php' ], true ) ) {
 			$block_types = array_diff(
 				$block_types,
 				[
@@ -190,6 +191,7 @@ final class BlockTypesController {
 			'checkout-shipping-methods-block',
 			'checkout-express-payment-block',
 			'checkout-terms-block',
+			'checkout-newsletter-subscription-block',
 		];
 	}
 }

@@ -53,6 +53,9 @@ const blocks = {
 		customDir: 'cart-checkout/checkout-i2',
 		isExperimental: true,
 	},
+	'mini-cart': {
+		customDir: 'cart-checkout/mini-cart',
+	},
 	'single-product': {
 		isExperimental: true,
 	},
@@ -131,6 +134,8 @@ const entries = {
 	frontend: {
 		reviews: './assets/js/blocks/reviews/frontend.js',
 		...getBlockEntries( 'frontend.{t,j}s{,x}' ),
+		'mini-cart-component':
+			'./assets/js/blocks/cart-checkout/mini-cart/component-frontend.tsx',
 	},
 	payments: {
 		'wc-payment-method-stripe':
