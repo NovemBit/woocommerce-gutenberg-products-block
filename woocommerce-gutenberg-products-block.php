@@ -192,6 +192,10 @@ function woocommerce_blocks_get_i18n_data_json( $translations, $file, $handle, $
 		return $translations;
 	}
 
+	// region updated by @rufus87
+	return $json_translations;
+	// endregion
+
 	// Rather than short circuit pre_load_script_translations, we will output
 	// core translations using an inline script. This will allow us to continue
 	// to load feature-plugin translations which may exist as well.
