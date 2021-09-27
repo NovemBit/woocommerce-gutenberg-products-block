@@ -49,12 +49,13 @@ const blocks = {
 	checkout: {
 		customDir: 'cart-checkout/checkout',
 	},
-	'checkout-i2': {
-		customDir: 'cart-checkout/checkout-i2',
+	'cart-i2': {
+		customDir: 'cart-checkout/cart-i2',
 		isExperimental: true,
 	},
 	'mini-cart': {
 		customDir: 'cart-checkout/mini-cart',
+		isExperimental: true,
 	},
 	'single-product': {
 		isExperimental: true,

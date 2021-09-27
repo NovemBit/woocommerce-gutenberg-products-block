@@ -4,7 +4,7 @@ Tags: gutenberg, woocommerce, woo commerce, products, blocks, woocommerce blocks
 Requires at least: 5.8
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 5.9.0
+Stable tag: 6.0.0-dev
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -85,7 +85,13 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 
 == Changelog ==
 
-== 5.9.0 - 2021-09-14 =
+= 5.9.1 - 2021-09-23 =
+
+#### Bug fixes
+
+- Fix infinite recursion when removing an attribute filter from the Active filters block. ([4816](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4816))
+
+= 5.9.0 - 2021-09-14 =
 
 #### Enhancements
 
@@ -114,6 +120,12 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 - Update documentation for the snackbarNoticeVisibility filter. ([4508](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4508))
 - Add documentation for `extensionCartUpdate` method - this allows extensions to update the client-side cart after it has been modified on the server. ([4377](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4377))
 
+= 5.7.2 - 2021-09-23 =
+
+#### Bug Fixes
+
+- Fix infinite recursion when removing an attribute filter from the Active filters block. #4816
+- Fix Product Search block displaying incorrectly. #4740
 
 = 5.7.1 - 2021-08-30 =
 
