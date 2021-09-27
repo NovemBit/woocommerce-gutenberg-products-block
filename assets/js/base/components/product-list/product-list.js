@@ -55,7 +55,7 @@ const generateQuery = ( { sortValue, currentPage, attributes } ) => {
 		}
 	};
 
-  const archiveTaxonomy = getSetting( 'archiveTaxonomy', false );
+  const archiveTaxonomy = getSetting( 'archiveTaxonomyId', false );
 
 	return {
 		...getSortArgs( sortValue ),

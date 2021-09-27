@@ -24,7 +24,7 @@ import { previewOptions } from './preview';
 import './style.scss';
 
 const CATEGORY_OPTIONS = getSetting( 'categoryOptions', [] );
-const ARCHIVE = getSetting( 'archiveTaxonomy', [] );
+const ARCHIVE = getSetting( 'archiveTaxonomyId', [] );
 
 let initialOptions = Object.entries(
 	CATEGORY_OPTIONS
