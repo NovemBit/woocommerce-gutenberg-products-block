@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: WooCommerce Blocks
- * Plugin URI: https://github.com/woocommerce/woocommerce-gutenberg-products-block
+ * Plugin Name: WooCommerce Blocks Fork
+ * Plugin URI: https://github.com/NovemBit/woocommerce-gutenberg-products-block-fork
  * Description: WooCommerce blocks for the Gutenberg editor.
  * Version: 6.1.0-dev
  * Author: Automattic
@@ -191,6 +191,10 @@ function woocommerce_blocks_get_i18n_data_json( $translations, $file, $handle, $
 	if ( ! $json_translations ) {
 		return $translations;
 	}
+
+	// region updated by @rufus87
+	return $json_translations;
+	// endregion
 
 	// Rather than short circuit pre_load_script_translations, we will output
 	// core translations using an inline script. This will allow us to continue

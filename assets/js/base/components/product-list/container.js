@@ -9,7 +9,10 @@ import PropTypes from 'prop-types';
  */
 import ProductList from './product-list';
 
-const ProductListContainer = ( { attributes } ) => {
+const ProductListContainer = ( {
+   attributes,
+   isEditor = false
+} ) => {
 	const [ currentPage, setPage ] = useState( 1 );
 	const [ currentSort, setSort ] = useState( attributes.orderby );
 	useEffect( () => {
@@ -32,6 +35,7 @@ const ProductListContainer = ( { attributes } ) => {
 			onPageChange={ onPageChange }
 			onSortChange={ onSortChange }
 			sortValue={ currentSort }
+			isEditor={isEditor}
 		/>
 	);
 };

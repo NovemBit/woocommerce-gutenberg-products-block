@@ -273,7 +273,7 @@ class Editor extends Component {
 
 		return (
 			<Disabled>
-				<Block attributes={ attributes } />
+				<Block attributes={ attributes } isEditor />
 			</Disabled>
 		);
 	};

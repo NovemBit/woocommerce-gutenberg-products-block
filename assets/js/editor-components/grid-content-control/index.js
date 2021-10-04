@@ -13,7 +13,7 @@ import { ToggleControl } from '@wordpress/components';
  * @param {Object} props.settings
  */
 const GridContentControl = ( { onChange, settings } ) => {
-	const { button, price, rating, title } = settings;
+	const { button, price, rating, title, category } = settings;
 	return (
 		<>
 			<ToggleControl
@@ -83,6 +83,22 @@ const GridContentControl = ( { onChange, settings } ) => {
 				checked={ button }
 				onChange={ () => onChange( { ...settings, button: ! button } ) }
 			/>
+			<ToggleControl
+				label={ __( 'Product categories', 'woo-gutenberg-products-block' ) }
+				help={
+					category
+						? __(
+						'Product categories are visible.',
+						'woo-gutenberg-products-block'
+						)
+						: __(
+						'Product categories are hidden.',
+						'woo-gutenberg-products-block'
+						)
+				}
+				checked={ category }
+				onChange={ () => onChange( { ...settings, category: ! category } ) }
+			/>
 		</>
 	);
 };
@@ -96,6 +112,7 @@ GridContentControl.propTypes = {
 		price: PropTypes.bool.isRequired,
 		rating: PropTypes.bool.isRequired,
 		title: PropTypes.bool.isRequired,
+		category: PropTypes.bool.isRequired,
 	} ).isRequired,
 	/**
 	 * Callback to update the layout settings.

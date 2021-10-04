@@ -121,6 +121,29 @@ class ProductCollectionDataSchema extends AbstractSchema {
 					],
 				],
 			],
+			'category_counts' => [
+				'description' => __( 'Returns number of products with each category.', 'woo-gutenberg-products-block' ),
+				'type'        => [ 'array', 'null' ],
+				'context'     => [ 'view', 'edit' ],
+				'readonly'    => true,
+				'items'       => [
+					'type'       => 'object',
+					'properties' => [
+						'id' => [
+							'description' => __( 'ID', 'woo-gutenberg-products-block' ),
+							'type'        => 'integer',
+							'context'     => [ 'view', 'edit' ],
+							'readonly'    => true,
+						],
+						'count'  => [
+							'description' => __( 'Number of products.', 'woo-gutenberg-products-block' ),
+							'type'        => 'integer',
+							'context'     => [ 'view', 'edit' ],
+							'readonly'    => true,
+						],
+					],
+				],
+			],
 		];
 	}
 
@@ -141,6 +164,7 @@ class ProductCollectionDataSchema extends AbstractSchema {
 			'attribute_counts'    => $data['attribute_counts'],
 			'rating_counts'       => $data['rating_counts'],
 			'stock_status_counts' => $data['stock_status_counts'],
+			'category_counts'     => $data['category_counts'],
 		];
 	}
 }
