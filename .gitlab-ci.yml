@@ -59,6 +59,15 @@ noorb:dev:
   dependencies:
     - build
 
+maran:dev:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - wp-deploy plugin 188.34.206.116 21122
+  dependencies:
+    - build
+
 novembit:dev:
   stage: deploy
   only:
