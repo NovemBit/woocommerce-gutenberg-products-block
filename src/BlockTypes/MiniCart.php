@@ -5,6 +5,7 @@ use Automattic\WooCommerce\Blocks\Package;
 use Automattic\WooCommerce\Blocks\Assets;
 use Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry;
 use Automattic\WooCommerce\Blocks\StoreApi\Utilities\CartController;
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 
 /**
  * Mini Cart class.
@@ -96,6 +97,14 @@ class MiniCart extends AbstractBlock {
 			}
 		}
 
+		$payment_method_registry = Package::container()->get( PaymentMethodRegistry::class );
+		$payment_methods         = $payment_method_registry->get_all_active_payment_method_script_dependencies();
+
+		foreach ( $payment_methods as $payment_method ) {
+			$payment_method_script = $this->get_script_from_handle( $payment_method );
+			$this->append_script_and_deps_src( $payment_method_script );
+		}
+
 		$this->scripts_to_lazy_load['wc-block-mini-cart-component-frontend'] = array(
 			'src'     => $script_data['src'],
 			'version' => $script_data['version'],
@@ -113,6 +122,9 @@ class MiniCart extends AbstractBlock {
 			true
 		);
 
+		/**
+		 * Fires after cart block data is registered.
+		 */
 		do_action( 'woocommerce_blocks_cart_enqueue_data' );
 	}
 
@@ -162,6 +174,9 @@ class MiniCart extends AbstractBlock {
 				}
 			}
 		}
+		if ( ! $script->src ) {
+			return;
+		}
 		$this->scripts_to_lazy_load[ $script->handle ] = array(
 			'src'          => $script->src,
 			'version'      => $script->ver,
@@ -180,7 +195,7 @@ class MiniCart extends AbstractBlock {
 	 * @return string Rendered block type output.
 	 */
 	protected function render( $attributes, $content ) {
-		return $this->inject_html_data_attributes( $content . $this->get_markup(), $attributes );
+		return $content . $this->get_markup();
 	}
 
 	/**
@@ -204,16 +219,6 @@ class MiniCart extends AbstractBlock {
 			$cart_contents_total += $cart->get_subtotal_tax();
 		}
 
-		$button_text = sprintf(
-			/* translators: %d is the number of products in the cart. */
-			_n(
-				'%d item',
-				'%d items',
-				$cart_contents_count,
-				'woo-gutenberg-products-block'
-			),
-			$cart_contents_count
-		);
 		$aria_label = sprintf(
 			/* translators: %1$d is the number of products in the cart. %2$s is the cart total */
 			_n(
@@ -235,15 +240,32 @@ class MiniCart extends AbstractBlock {
 			),
 			$cart_contents_count
 		);
+		$icon        = '<svg class="wc-block-mini-cart__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<g clip-path="url(#clip0)">
+				<path d="M7.50008 18.3332C7.96032 18.3332 8.33341 17.9601 8.33341 17.4998C8.33341 17.0396 7.96032 16.6665 7.50008 16.6665C7.03984 16.6665 6.66675 17.0396 6.66675 17.4998C6.66675 17.9601 7.03984 18.3332 7.50008 18.3332Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				<path d="M16.6666 18.3332C17.1268 18.3332 17.4999 17.9601 17.4999 17.4998C17.4999 17.0396 17.1268 16.6665 16.6666 16.6665C16.2063 16.6665 15.8333 17.0396 15.8333 17.4998C15.8333 17.9601 16.2063 18.3332 16.6666 18.3332Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				<path d="M0.833252 0.833496H4.16658L6.39992 11.9918C6.47612 12.3755 6.68484 12.7201 6.98954 12.9654C7.29424 13.2107 7.6755 13.341 8.06658 13.3335H16.1666C16.5577 13.341 16.9389 13.2107 17.2436 12.9654C17.5483 12.7201 17.757 12.3755 17.8333 11.9918L19.1666 5.00016H4.99992" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</g>
+			<defs>
+				<clipPath id="clip0">
+					<rect width="20" height="20" fill="white"/>
+				</clipPath>
+			</defs>
+		</svg>';
+		$button_html = '<span class="wc-block-mini-cart__amount">' . wp_strip_all_tags( wc_price( $cart_contents_total ) ) . '</span>
+		<span class="wc-block-mini-cart__quantity-badge">
+			' . $icon . '
+			<span class="wc-block-mini-cart__badge">' . $cart_contents_count . '</span>
+		</span>';
 
 		if ( is_cart() || is_checkout() ) {
 			return '<div class="wc-block-mini-cart">
-				<button class="wc-block-mini-cart__button" aria-label="' . $aria_label . '" disabled>' . $button_text . '</button>
+				<button class="wc-block-mini-cart__button" aria-label="' . $aria_label . '" disabled>' . $button_html . '</button>
 			</div>';
 		}
 
 		return '<div class="wc-block-mini-cart">
-			<button class="wc-block-mini-cart__button" aria-label="' . $aria_label . '">' . $button_text . '</button>
+			<button class="wc-block-mini-cart__button" aria-label="' . $aria_label . '">' . $button_html . '</button>
 			<div class="wc-block-mini-cart__drawer is-loading is-mobile wc-block-components-drawer__screen-overlay wc-block-components-drawer__screen-overlay--is-hidden" aria-hidden="true">
 				<div class="components-modal__frame wc-block-components-drawer">
 					<div class="components-modal__content">

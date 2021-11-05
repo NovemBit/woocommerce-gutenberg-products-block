@@ -42,16 +42,13 @@ const blocks = {
 	'product-search-filter': {},
 	'product-sorting': {},
 	'category-filter': {},
+	'color-attribute-filter': {},
 	'active-filters': {},
 	cart: {
 		customDir: 'cart-checkout/cart',
 	},
 	checkout: {
 		customDir: 'cart-checkout/checkout',
-	},
-	'cart-i2': {
-		customDir: 'cart-checkout/cart-i2',
-		isExperimental: true,
 	},
 	'mini-cart': {
 		customDir: 'cart-checkout/mini-cart',
@@ -60,8 +57,8 @@ const blocks = {
 	'single-product': {
 		isExperimental: true,
 	},
-	'color-attribute-filter': {},
-};
+	'legacy-template': {},
+}
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
 // `**/*.scss`...).
