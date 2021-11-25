@@ -100,6 +100,7 @@ const LegacyMainConfig = {
 			'all-products',
 			'price-filter',
 			'attribute-filter',
+			'color-attribute-filter',
 			'stock-filter',
 			'product-search-filter',
 			'product-sorting',
@@ -108,7 +109,6 @@ const LegacyMainConfig = {
 			'checkout',
 			'cart',
 			'single-product',
-			'color-attribute-filter',
 		],
 	} ),
 };
@@ -128,6 +128,7 @@ const LegacyFrontendConfig = {
 			'all-products',
 			'price-filter',
 			'attribute-filter',
+			'color-attribute-filter',
 			'stock-filter',
 			'product-search-filter',
 			'product-sorting',
@@ -136,7 +137,6 @@ const LegacyFrontendConfig = {
 			'checkout',
 			'cart',
 			'single-product',
-			'color-attribute-filter',
 		],
 	} ),
 };
@@ -149,6 +149,7 @@ const LegacyStylingConfig = {
 			'all-products',
 			'price-filter',
 			'attribute-filter',
+			'color-attribute-filter',
 			'stock-filter',
 			'product-search-filter',
 			'product-sorting',
@@ -157,7 +158,6 @@ const LegacyStylingConfig = {
 			'checkout',
 			'cart',
 			'single-product',
-			'color-attribute-filter',
 		],
 	} ),
 };

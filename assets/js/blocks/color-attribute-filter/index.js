@@ -18,7 +18,7 @@ registerBlockType( 'woocommerce/color-attribute-filter', {
 	),
 	icon: {
 		src: <Icon srcElement={ server } />,
-		foreground: '#96588a',
+		foreground: '#7f54b3',
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woo-gutenberg-products-block' ) ],
