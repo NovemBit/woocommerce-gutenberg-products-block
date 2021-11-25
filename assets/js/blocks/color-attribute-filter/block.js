@@ -34,7 +34,7 @@ import './style.scss';
  * @param {Object} props.attributes Incoming block attributes.
  * @param {boolean} props.isEditor
  */
-const AttributeFilterBlock = ( {
+const ColorAttributeFilterBlock = ( {
 	attributes: blockAttributes,
 	isEditor = false,
 } ) => {
@@ -412,4 +412,4 @@ const AttributeFilterBlock = ( {
 	);
 };
 
-export default AttributeFilterBlock;
+export default ColorAttributeFilterBlock;
