@@ -7,7 +7,7 @@ import {
 	RawHTML,
 	useState,
 	useEffect,
-	useRef,
+	useCallback,
 	unmountComponentAtNode,
 } from '@wordpress/element';
 import {
@@ -20,7 +20,8 @@ import {
 	formatPrice,
 	getCurrencyFromPriceResponse,
 } from '@woocommerce/price-format';
-import { getSetting } from '@woocommerce/settings';
+import { getSettingWithCoercion } from '@woocommerce/settings';
+import { isString, isBoolean } from '@woocommerce/types';
 
 /**
  * Internal dependencies
@@ -50,14 +51,19 @@ const MiniCartBlock = ( {
 	const [ skipSlideIn, setSkipSlideIn ] = useState< boolean >(
 		isInitiallyOpen
 	);
+	const [ contentsNode, setContentsNode ] = useState< HTMLDivElement | null >(
+		null
+	);
 
-	const contentsRef = useRef() as React.MutableRefObject< HTMLDivElement >;
+	const contentsRef = useCallback( ( node ) => {
+		setContentsNode( node );
+	}, [] );
 
 	useEffect( () => {
-		if ( contentsRef.current instanceof Element ) {
-			const container = contentsRef.current.querySelector(
+		if ( contentsNode instanceof Element ) {
+			const container = contentsNode.querySelector(
 				'.wc-block-mini-cart-contents'
-			);
+			) as HTMLElement;
 			if ( ! container ) {
 				return;
 			}
@@ -65,17 +71,14 @@ const MiniCartBlock = ( {
 				renderBlock( {
 					Block: MiniCartContentsBlock,
 					container,
+					attributes: {},
+					props: {},
 				} );
-			} else {
-				unmountComponentAtNode( container );
 			}
 		}
-	}, [ isOpen ] );
 
-	useEffect( () => {
 		return () => {
-			const contentsNode = contentsRef.current as unknown;
-			if ( contentsNode instanceof Element ) {
+			if ( contentsNode instanceof Element && isOpen ) {
 				const container = contentsNode.querySelector(
 					'.wc-block-mini-cart-contents'
 				);
@@ -84,7 +87,7 @@ const MiniCartBlock = ( {
 				}
 			}
 		};
-	}, [] );
+	}, [ isOpen, contentsNode ] );
 
 	useEffect( () => {
 		const openMiniCart = () => {
@@ -113,7 +116,15 @@ const MiniCartBlock = ( {
 		};
 	}, [] );
 
-	const subTotal = getSetting( 'displayCartPricesIncludingTax', false )
+	const showIncludingTax = getSettingWithCoercion(
+		'displayCartPricesIncludingTax',
+		false,
+		isBoolean
+	);
+
+	const taxLabel = getSettingWithCoercion( 'taxLabel', '', isString );
+
+	const subTotal = showIncludingTax
 		? parseInt( cartTotals.total_items, 10 ) +
 		  parseInt( cartTotals.total_items_tax, 10 )
 		: parseInt( cartTotals.total_items, 10 );
@@ -154,6 +165,11 @@ const MiniCartBlock = ( {
 						getCurrencyFromPriceResponse( cartTotals )
 					) }
 				</span>
+				{ taxLabel !== '' && subTotal !== 0 && (
+					<small className="wc-block-mini-cart__tax-label">
+						{ taxLabel }
+					</small>
+				) }
 				<QuantityBadge
 					count={ cartItemsCount }
 					colorClassNames={ colorClassNames }
