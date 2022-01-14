@@ -62,7 +62,7 @@ const blocks = {
 		isExperimental: true,
 	},
 	'legacy-template': {},
-}
+};
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
 // `**/*.scss`...).
