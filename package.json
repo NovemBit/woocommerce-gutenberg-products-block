@@ -27,10 +27,10 @@
 	},
 	"license": "GPL-3.0+",
 	"scripts": {
-		"build": "rimraf build/* && cross-env BABEL_ENV=default NODE_ENV=production webpack",
+		"build": "rimraf build/* && cross-env BABEL_ENV=default NODE_ENV=development webpack",
 		"build:deploy": "rimraf vendor/* && cross-env WOOCOMMERCE_BLOCKS_PHASE=2 composer install --no-dev && cross-env WOOCOMMERCE_BLOCKS_PHASE=2 npm run build --loglevel error",
 		"build:e2e-test": "npm run build",
-		"build:map": "cross-env BABEL_ENV=default NODE_ENV=production FORCE_MAP=true webpack",
+		"build:map": "cross-env BABEL_ENV=default NODE_ENV=development FORCE_MAP=true webpack",
 		"build:docs": "./vendor/bin/wp-hooks-generator --input=src --output=bin/hook-docs/data && node ./bin/hook-docs",
 		"changelog": "node ./bin/changelog",
 		"changelog:zenhub": "node ./bin/changelog --changelogSrcType='ZENHUB_RELEASE'",
