@@ -57,7 +57,10 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'align'             => $this->get_schema_align(),
 			'alignButtons'      => $this->get_schema_boolean( false ),
 			'isPreview'         => $this->get_schema_boolean( false ),
-			'stockStatus'       => array_keys( wc_get_product_stock_status_options() ),
+			'stockStatus'       => array(
+				'type'    => 'array',
+				'default' => array_keys( wc_get_product_stock_status_options() ),
+			),
 		);
 	}
 
@@ -128,11 +131,10 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		return array(
 			'type'       => 'object',
 			'properties' => array(
-				'title'    => $this->get_schema_boolean( true ),
-				'price'    => $this->get_schema_boolean( true ),
-				'rating'   => $this->get_schema_boolean( true ),
-				'button'   => $this->get_schema_boolean( true ),
-				'category' => $this->get_schema_boolean( true ),
+				'title'  => $this->get_schema_boolean( true ),
+				'price'  => $this->get_schema_boolean( true ),
+				'rating' => $this->get_schema_boolean( true ),
+				'button' => $this->get_schema_boolean( true ),
 			),
 		);
 	}
@@ -165,11 +167,10 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'categories'        => array(),
 			'catOperator'       => 'any',
 			'contentVisibility' => array(
-				'title'    => true,
-				'price'    => true,
-				'rating'   => true,
-				'button'   => true,
-				'category' => true,
+				'title'  => true,
+				'price'  => true,
+				'rating' => true,
+				'button' => true,
 			),
 			'stockStatus'       => array_keys( wc_get_product_stock_status_options() ),
 		);
@@ -294,15 +295,16 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return void
 	 */
 	protected function set_stock_status_query_args( &$query_args ) {
+		$stock_statuses = array_keys( wc_get_product_stock_status_options() );
+
 		// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-		if ( isset( $this->attributes['stockStatus'] ) &&
-			( array_keys( wc_get_product_stock_status_options() ) !== $this->attributes['stockStatus'] || [] !== $this->attributes['stockStatus'] )
-		) {
+		if ( isset( $this->attributes['stockStatus'] ) && $stock_statuses !== $this->attributes['stockStatus'] ) {
 			// Reset meta_query then update with our stock status.
 			$query_args['meta_query']   = $this->meta_query;
 			$query_args['meta_query'][] = array(
-				'key'   => '_stock_status',
-				'value' => $this->attributes['stockStatus'],
+				'key'     => '_stock_status',
+				'value'   => array_merge( [ '' ], $this->attributes['stockStatus'] ),
+				'compare' => 'IN',
 			);
 		} else {
 			$query_args['meta_query'] = $this->meta_query;
@@ -481,7 +483,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'price'     => $this->get_price_html( $product ),
 			'badge'     => $this->get_sale_badge_html( $product ),
 			'button'    => $this->get_button_html( $product ),
-			'category'  => $this->get_categories_html( $product ),
 		);
 
 		/**
@@ -500,7 +501,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 					{$data->title}
 				</a>
 				{$data->badge}
-				{$data->category}
 				{$data->price}
 				{$data->rating}
 				{$data->button}
@@ -617,20 +617,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			return '';
 		}
 		return '<div class="wp-block-button wc-block-grid__product-add-to-cart">' . $this->get_add_to_cart( $product ) . '</div>';
-	}
-
-	/**
-	 * Get the button.
-	 *
-	 * @param \WC_Product $product Product.
-	 * @return string Rendered product output.
-	 */
-	protected function get_categories_html( $product ) {
-		if ( empty( $this->attributes['contentVisibility']['category'] ) ) {
-			return '';
-		}
-
-		return '<div class="wc-block-grid__product-categories-list">' . wc_get_product_category_list( $product->get_id() ) . '</div>';
 	}
 
 	/**
