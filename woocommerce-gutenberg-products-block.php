@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce Blocks
+ * Plugin Name: WooCommerce Blocks Fork
  * Plugin URI: https://github.com/woocommerce/woocommerce-gutenberg-products-block
  * Description: WooCommerce blocks for the Gutenberg editor.
  * Version: 6.9.0-dev
