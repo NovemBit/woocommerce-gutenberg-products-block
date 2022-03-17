@@ -18,12 +18,12 @@ These documents are all dealing with extensibility in the various WooCommerce Bl
 
 ## REST API
 
-| Document                                                                                | Description                                                                         |
-| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| [Exposing your data in the Store API.](./extend-rest-api-add-data.md)                   | Explains how you can add additional data to Store API endpoints.                    |
-| [Available endpoints to extend with ExtendRestAPI.](./available-endpoints-to-extend.md) | A list of all available endpoints to extend.                                        |
-| [Adding an endpoint to ExtendRestAPI.](./extend-rest-api-new-endpoint.md)               | A step by step process for contributors to expose a new endpoint via ExtendRestApi. |
-| [Available Formatters](./extend-rest-api-formatters.md)                                 | Available `Formatters` to format data for use in the Store API.                     |
+| Document                                                                              | Description                                                                        |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [Exposing your data in the Store API.](./extend-rest-api-add-data.md)                 | Explains how you can add additional data to Store API endpoints.                   |
+| [Available endpoints to extend with ExtendSchema](./available-endpoints-to-extend.md) | A list of all available endpoints to extend.                                       |
+| [Adding an endpoint to ExtendSchema.](./extend-rest-api-new-endpoint.md)              | A step by step process for contributors to expose a new endpoint via ExtendSchema. |
+| [Available Formatters](./extend-rest-api-formatters.md)                               | Available `Formatters` to format data for use in the Store API.                    |
 
 ## Checkout Payment Methods
 
@@ -44,3 +44,12 @@ In addition to the reference material below, [please see the `block-checkout` pa
 | [Slots and Fills.](./slot-fills.md)                | Explains Slot Fills and how to use them to render your own components in Cart and Checkout.                       |
 | [Available Slot Fills.](./available-slot-fills.md) | Available Slots that you can use and their positions in Cart and Checkout.                                        |
 | [DOM Events](./dom-events.md)                      | A list of DOM Events used by some blocks to communicate between them and with other parts of WooCommerce.         |
+
+<!-- FEEDBACK -->
+---
+
+[We're hiring!](https://woocommerce.com/careers/) Come work with us!
+
+🐞 Found a mistake, or have a suggestion? [Leave feedback about this document here.](https://github.com/woocommerce/woocommerce-gutenberg-products-block/issues/new?assignees=&labels=type%3A+documentation&template=--doc-feedback.md&title=Feedback%20on%20./docs/extensibility/README.md)
+<!-- /FEEDBACK -->
+

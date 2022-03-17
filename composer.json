@@ -16,12 +16,25 @@
 	"automattic/jetpack-autoloader": "^2.9.1"
   },
   "require-dev": {
-	"phpunit/phpunit": "^9.3.0",
-	"woocommerce/woocommerce-sniffs": "0.1.0"
+	"wp-phpunit/wp-phpunit": "^5.4",
+	"woocommerce/woocommerce-sniffs": "0.1.0",
+	"yoast/phpunit-polyfills": "^1.0",
+	"johnbillion/wp-hooks-generator": "^0.7.0",
+	"mockery/mockery": "^1.4"
   },
   "autoload": {
 	"psr-4": {
+	  "Automattic\\WooCommerce\\StoreApi\\": "src/StoreApi/",
 	  "Automattic\\WooCommerce\\Blocks\\": "src/"
+	},
+	"files": [
+	  "src/StoreApi/deprecated.php",
+	  "src/StoreApi/functions.php"
+	]
+  },
+  "autoload-dev": {
+	"psr-4": {
+	  "Automattic\\WooCommerce\\Blocks\\Tests\\": "tests/php"
 	}
   },
   "scripts": {
@@ -37,57 +50,24 @@
 	"post-install-cmd": [
 	  "composer run-script build"
 	],
-	"license": "GPL-3.0-or-later",
-	"prefer-stable": true,
-	"minimum-stability": "dev",
-	"require": {
-		"composer/installers": "^1.7.0",
-		"automattic/jetpack-autoloader": "^2.9.1"
+	"post-update-cmd": [
+	  "composer run-script build"
+	]
+  },
+  "config": {
+	"platform": {
+	  "php": "7.4.24"
 	},
-	"require-dev": {
-		"wp-phpunit/wp-phpunit": "^5.4",
-		"woocommerce/woocommerce-sniffs": "0.1.0",
-		"yoast/phpunit-polyfills": "^1.0",
-		"johnbillion/wp-hooks-generator": "^0.7.0",
-		"mockery/mockery": "^1.4"
-	},
-	"autoload": {
-		"psr-4": {
-			"Automattic\\WooCommerce\\Blocks\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Automattic\\WooCommerce\\Blocks\\Tests\\": "tests/php"
-		}
-	},
-	"scripts": {
-		"phpcs": [
-			"phpcs --extensions=php -s -p"
-		],
-		"phpcbf": [
-			"phpcbf -p"
-		],
-    "build": [
-      "run(){ npm i && npm run build; }; run"
-    ],
-    "post-install-cmd": [
-      "composer run-script build"
-    ],
-    "post-update-cmd": [
-      "composer run-script build"
-    ]
-	},
-	"config": {
-		"platform": {
-			"php": "7.4.24"
-		}
-	},
-	"extra": {
-		"scripts-description": {
-			"phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
-			"phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
-		}
+	"allow-plugins": {
+	  "automattic/jetpack-autoloader": true,
+	  "composer/installers": true,
+	  "dealerdirect/phpcodesniffer-composer-installer": true
+	}
+  },
+  "extra": {
+	"scripts-description": {
+	  "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+	  "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
 	}
   }
 }

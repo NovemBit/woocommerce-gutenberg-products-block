@@ -11,12 +11,18 @@ import {
 	getCurrencyFromPriceResponse,
 } from '@woocommerce/price-format';
 import { getSettingWithCoercion } from '@woocommerce/settings';
-import { isBoolean, isString } from '@woocommerce/types';
 import {
-	RawHTML,
+	CartResponseTotals,
+	isBoolean,
+	isString,
+	isCartResponseTotals,
+	isNumber,
+} from '@woocommerce/types';
+import {
 	unmountComponentAtNode,
 	useCallback,
 	useEffect,
+	useRef,
 	useState,
 } from '@wordpress/element';
 import { sprintf, _n } from '@wordpress/i18n';
@@ -31,7 +37,6 @@ import { blockName } from '../mini-cart-contents/attributes';
 
 interface Props {
 	isInitiallyOpen?: boolean;
-	transparentButton: boolean;
 	colorClassNames?: string;
 	style?: Record< string, Record< string, string > >;
 	contents: string;
@@ -43,7 +48,20 @@ const MiniCartBlock = ( {
 	style,
 	contents = '',
 }: Props ): JSX.Element => {
-	const { cartItemsCount, cartIsLoading, cartTotals } = useStoreCart();
+	const {
+		cartItemsCount: cartItemsCountFromApi,
+		cartIsLoading,
+		cartTotals: cartTotalsFromApi,
+	} = useStoreCart();
+
+	const isFirstLoadingCompleted = useRef( cartIsLoading );
+
+	useEffect( () => {
+		if ( isFirstLoadingCompleted.current && ! cartIsLoading ) {
+			isFirstLoadingCompleted.current = false;
+		}
+	}, [ cartIsLoading, isFirstLoadingCompleted ] );
+
 	const [ isOpen, setIsOpen ] = useState< boolean >( isInitiallyOpen );
 	// We already rendered the HTML drawer placeholder, so we want to skip the
 	// slide in animation.
@@ -121,7 +139,28 @@ const MiniCartBlock = ( {
 		isBoolean
 	);
 
+	const preFetchedCartTotals = getSettingWithCoercion< CartResponseTotals | null >(
+		'cartTotals',
+		null,
+		isCartResponseTotals
+	);
+
+	const preFetchedCartItemsCount = getSettingWithCoercion< number >(
+		'cartItemsCount',
+		0,
+		isNumber
+	);
+
 	const taxLabel = getSettingWithCoercion( 'taxLabel', '', isString );
+
+	const cartTotals =
+		! isFirstLoadingCompleted.current || preFetchedCartTotals === null
+			? cartTotalsFromApi
+			: preFetchedCartTotals;
+
+	const cartItemsCount = ! isFirstLoadingCompleted.current
+		? cartItemsCountFromApi
+		: preFetchedCartItemsCount;
 
 	const subTotal = showIncludingTax
 		? parseInt( cartTotals.total_items, 10 ) +
@@ -169,11 +208,7 @@ const MiniCartBlock = ( {
 						{ taxLabel }
 					</small>
 				) }
-				<QuantityBadge
-					count={ cartItemsCount }
-					colorClassNames={ colorClassNames }
-					style={ colorStyle }
-				/>
+				<QuantityBadge count={ cartItemsCount } />
 			</button>
 			<Drawer
 				className={ classnames(
@@ -193,10 +228,8 @@ const MiniCartBlock = ( {
 				<div
 					className="wc-block-mini-cart__template-part"
 					ref={ contentsRef }
-				>
-					{ /* @todo The `div` wrapper of RawHTML isn't removed on the front end. */ }
-					<RawHTML>{ contents }</RawHTML>
-				</div>
+					dangerouslySetInnerHTML={ { __html: contents } }
+				></div>
 			</Drawer>
 		</>
 	);

@@ -144,7 +144,7 @@ export const useCollectionData = ( {
 	}, [ collectionDataQueryState ] );
 
 	return useCollection( {
-		namespace: '/wc/store',
+		namespace: '/wc/store/v1',
 		resourceName: 'products/collection-data',
 		query: {
 			...queryState,

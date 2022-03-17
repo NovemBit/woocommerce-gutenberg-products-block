@@ -1,16 +1,16 @@
-# Adding an endpoint to ExtendRestAPI
+# Adding an endpoint to ExtendSchema
 
 This document is intended for contrubtors to WooCommerce Blocks plugin, if you feel like a new endpoint should be added, feel free to open an issue or a PR detailing why.
 
 ## Extending `GET` endpoints in Store API.
 
-ExtendRestAPI needs to expose each endpoint individually. If you want to expose a new endpoint, you have to follow these steps:
+ExtendSchema needs to expose each endpoint individually. If you want to expose a new endpoint, you have to follow these steps:
 
-1. In `ExtendRestApi` class, add your endpoint `IDENTIFIER` to the `$endpoints` variable.
+1. In `ExtendSchema` class, add your endpoint `IDENTIFIER` to the `$endpoints` variable.
 
 ```php
 
-use Automattic\WooCommerce\Blocks\StoreApi\Schemas\BillingAddressSchema;
+use Automattic\WooCommerce\StoreApi\Schemas\BillingAddressSchema;
 
 private $endpoints = [ /* other identifiers */, BillingAddressSchema::IDENTIFIER ];
 
@@ -39,3 +39,12 @@ self::EXTENDING_KEY    => $this->get_extended_data( self::IDENTIFIER, $cart_item
 That's it, your endpoint would now contain `extensions` in your endpoint, and you can consume it in the frontend.
 
 Extending a new endpoint is usually half the work, you will need to receive this data in the frontend and pass it to any other extensibility point (Slot, Filter, Event).
+
+<!-- FEEDBACK -->
+---
+
+[We're hiring!](https://woocommerce.com/careers/) Come work with us!
+
+🐞 Found a mistake, or have a suggestion? [Leave feedback about this document here.](https://github.com/woocommerce/woocommerce-gutenberg-products-block/issues/new?assignees=&labels=type%3A+documentation&template=--doc-feedback.md&title=Feedback%20on%20./docs/extensibility/extend-rest-api-new-endpoint.md)
+<!-- /FEEDBACK -->
+

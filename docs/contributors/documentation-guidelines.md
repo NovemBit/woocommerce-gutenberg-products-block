@@ -63,7 +63,7 @@ Classes and tokens from the codebase must be written exactly as they appear in t
 
 **Example**
 
--   **ExtendRestApi:** The `p` and the `i` of `ExtendRestApi` are written in lowercase
+-   **RestApi:** The `p` and the `i` of `RestApi` are written in lowercase
 -   **Composer:** The `C` of `Composer` is written in uppercase.
 -   **ESLint:** The `E`, the `S` and the `L` of `ESLint` are written in uppercase.
 
@@ -149,3 +149,12 @@ When explaining functionality, the following structure should be used:
 ## Link references
 
 When referencing other documentations, the corresponding document should be linked.
+
+<!-- FEEDBACK -->
+---
+
+[We're hiring!](https://woocommerce.com/careers/) Come work with us!
+
+🐞 Found a mistake, or have a suggestion? [Leave feedback about this document here.](https://github.com/woocommerce/woocommerce-gutenberg-products-block/issues/new?assignees=&labels=type%3A+documentation&template=--doc-feedback.md&title=Feedback%20on%20./docs/contributors/documentation-guidelines.md)
+<!-- /FEEDBACK -->
+

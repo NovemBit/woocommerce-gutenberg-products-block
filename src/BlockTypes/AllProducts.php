@@ -39,30 +39,13 @@ class AllProducts extends AbstractBlock {
 		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
 		$this->asset_data_registry->add( 'hideOutOfStockItems', 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ), true );
 		$this->asset_data_registry->add( 'archiveTaxonomyId',  $archive, true );
+		$this->hydrate_from_api();
 	}
 
 	/**
-	 * Register script and style assets for the block type before it is registered.
-	 *
-	 * This registers the scripts; it does not enqueue them.
+	 * Hydrate the All Product block with data from the API.
 	 */
-	protected function register_block_type_assets() {
-		parent::register_block_type_assets();
-		$this->register_chunk_translations(
-			[
-				'atomic-block-components/price',
-				'atomic-block-components/image',
-				'atomic-block-components/title',
-				'atomic-block-components/rating',
-				'atomic-block-components/button',
-				'atomic-block-components/summary',
-				'atomic-block-components/sale-badge',
-				'atomic-block-components/sku',
-				'atomic-block-components/category-list',
-				'atomic-block-components/tag-list',
-				'atomic-block-components/stock-indicator',
-				'atomic-block-components/add-to-cart',
-			]
-		);
+	protected function hydrate_from_api() {
+		$this->asset_data_registry->hydrate_api_request( '/wc/store/v1/cart' );
 	}
 }

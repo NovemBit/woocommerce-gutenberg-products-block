@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { Icon, server } from '@woocommerce/icons';
+import { Icon, category } from '@wordpress/icons';
 import classNames from 'classnames';
 
 /**
@@ -14,8 +14,12 @@ import edit from './edit.js';
 registerBlockType( 'woocommerce/product-sorting', {
 	title: __( 'Product Sorting', 'woo-gutenberg-products-block' ),
 	icon: {
-		src: <Icon srcElement={ server } />,
-		foreground: '#7f54b3',
+		src: (
+			<Icon
+				icon={ category }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woo-gutenberg-products-block' ) ],
