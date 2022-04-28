@@ -44,17 +44,11 @@ const blocks = {
 	'category-filter': {},
 	'color-attribute-filter': {},
 	'active-filters': {},
-	cart: {
-		customDir: 'cart-checkout/cart',
-	},
+	cart: {},
 	checkout: {},
-	'mini-cart': {
-		customDir: 'cart-checkout/mini-cart',
-		isExperimental: true,
-	},
+	'mini-cart': {},
 	'mini-cart-contents': {
-		customDir: 'cart-checkout/mini-cart-contents',
-		isExperimental: true,
+		customDir: 'mini-cart/mini-cart-contents',
 	},
 	'single-product': {
 		isExperimental: true,
@@ -136,7 +130,7 @@ const entries = {
 		reviews: './assets/js/blocks/reviews/frontend.js',
 		...getBlockEntries( 'frontend.{t,j}s{,x}' ),
 		'mini-cart-component':
-			'./assets/js/blocks/cart-checkout/mini-cart/component-frontend.tsx',
+			'./assets/js/blocks/mini-cart/component-frontend.tsx',
 	},
 	payments: {
 		'wc-payment-method-cheque':
