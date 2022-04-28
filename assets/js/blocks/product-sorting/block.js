@@ -56,6 +56,7 @@ const StockStatusFilterBlock = ({
 	});
 
 	useEffect(() => {
+		console.log( queryState )
 		if (queryState.orderby !== "undefined") {
 			setDefaultSort(queryState.orderby);
 		}
